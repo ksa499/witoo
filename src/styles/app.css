@@ -11,3 +11,5 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 .qr-panel p { margin: 0; font-size: 12px; line-height: 18px; color: #6e6d66; }
 .qr-panel p.u { font-weight: 600; color: #252422; word-break: break-all; margin-bottom: 6px; }
 .stage > div, .stage > div > div:first-child { height: var(--stage-h, 852px) !important; }
+.stage > div > div:first-child { width: var(--stage-w, 393px) !important; }
+.stage .wt-tabbar, .stage .wt-topbar { max-width: none; }
