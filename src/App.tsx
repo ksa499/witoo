@@ -5,9 +5,13 @@ import QrPanel from './QrPanel';
 const W = 393, H = 852;
 
 function viewport() {
-  const vv = window.visualViewport;
-  return { w: Math.round(vv?.width || window.innerWidth), h: Math.round(vv?.height || window.innerHeight) };
+  return { w: window.innerWidth, h: window.innerHeight };
 }
+
+const editing = () => {
+  const a = document.activeElement as HTMLElement | null;
+  return !!a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable);
+};
 
 /**
  * Fits the 393×852 design to any phone.
@@ -20,14 +24,19 @@ export default function App() {
   const [size, setSize] = useState(viewport());
   const stageRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const on = () => setSize(viewport());
+    // The on-screen keyboard shrinks the viewport; keep the layout while typing.
+    const on = () => setSize((prev) => {
+      const next = viewport();
+      return editing() && next.w === prev.w && next.h < prev.h ? prev : next;
+    });
+    const afterBlur = () => setTimeout(on, 350);
     window.addEventListener('resize', on);
     window.addEventListener('orientationchange', on);
-    window.visualViewport?.addEventListener('resize', on);
+    window.addEventListener('focusout', afterBlur);
     return () => {
       window.removeEventListener('resize', on);
       window.removeEventListener('orientationchange', on);
-      window.visualViewport?.removeEventListener('resize', on);
+      window.removeEventListener('focusout', afterBlur);
     };
   }, []);
 
