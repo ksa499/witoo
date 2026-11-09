@@ -75,6 +75,8 @@ export default function App() {
         for (let a = el.parentElement; a && a !== root; a = a.parentElement) {
           const d = dec.get(a);
           if (d?.moved) moved = true;
+          const oy = getComputedStyle(a).overflowY;
+          if (oy === 'auto' || oy === 'scroll') moved = true; // content inside scroll areas stays put
           if (d?.gw) grown = true;
         }
         return { moved, grown };

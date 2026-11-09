@@ -5,13 +5,14 @@ import { WitooDS } from '../ds/witoo';
 import './Drawer.css';
 
 const BASE = [
-  { id: 'b1', title: '욕실 곰팡이, 이렇게 해결했어요', likes: 24, cmts: 2, s: ['환기가 안 되어 줄눈에 곰팡이가 생김', '뿌리는 세정제 대신 젤 타입 제거제 사용', '흐르지 않아 깔끔하게 제거됨', '제거제를 바르고 30분 뒤 닦아낸다'] },
-  { id: 'b2', title: '세탁기 냄새 잡는 법', likes: 24, cmts: 0, s: ['세탁 후에도 옷에서 쿰쿰한 냄새가 남', '세탁조 클리너로 통살균 코스 돌림', '냄새가 사라지고 세탁조가 깨끗해짐', '세탁 후 문을 열어 말려둔다'] },
-  { id: 'b3', title: '배수구 막힘 뚫는 방법', likes: 24, cmts: 0, s: ['샤워할 때 물이 잘 안 내려감', '뚫어뻥 대신 베이킹소다와 식초 사용', '뜨거운 물로 헹구니 시원하게 내려감', '머리카락 거름망을 자주 비운다'] },
-  { id: 'b4', title: '창문 틈새 바람 막기', likes: 24, cmts: 0, s: ['겨울마다 창문 틈으로 찬바람이 들어옴', '문풍지와 단열 테이프를 겹쳐 붙임', '체감 온도가 확 올라감', '붙이기 전에 먼지부터 닦는다'] },
-  { id: 'b5', title: '배수구 막힘 뚫는 방법', likes: 24, cmts: 0, s: ['싱크대 물이 천천히 내려감', '트랩을 분리해 찌꺼기를 제거', '물이 막힘 없이 내려감', '음식물 찌꺼기는 바로 버린다'] },
-  { id: 'b6', title: '창문 틈새 바람 막기', likes: 24, cmts: 0, s: ['현관 쪽에서 외풍이 느껴짐', '문 아래에 틈막이를 설치', '바람이 거의 들어오지 않음', '틈막이는 문 폭에 맞게 자른다'] }
+  { id: 'b1', img: '/img/p1.png', title: '욕실 곰팡이, 이렇게 해결했어요', likes: 24, cmts: 2, s: ['환기가 안 되어 줄눈에 곰팡이가 생김', '뿌리는 세정제 대신 젤 타입 제거제 사용', '흐르지 않아 깔끔하게 제거됨', '제거제를 바르고 30분 뒤 닦아낸다'] },
+  { id: 'b2', img: '/img/p2.png', title: '세탁기 냄새 잡는 법', likes: 24, cmts: 0, s: ['세탁 후에도 옷에서 쿰쿰한 냄새가 남', '세탁조 클리너로 통살균 코스 돌림', '냄새가 사라지고 세탁조가 깨끗해짐', '세탁 후 문을 열어 말려둔다'] },
+  { id: 'b3', img: '/img/p3.png', title: '욕실 배수구 막힘 뚫는 방법', likes: 24, cmts: 0, s: ['샤워할 때 물이 잘 안 내려감', '뚫어뻥 대신 베이킹소다와 식초 사용', '뜨거운 물로 헹구니 시원하게 내려감', '머리카락 거름망을 자주 비운다'] },
+  { id: 'b4', img: '/img/p4.png', title: '창문 틈새 바람 막기', likes: 24, cmts: 0, s: ['겨울마다 창문 틈으로 찬바람이 들어옴', '문풍지와 단열 테이프를 겹쳐 붙임', '체감 온도가 확 올라감', '붙이기 전에 먼지부터 닦는다'] },
+  { id: 'b5', img: '/img/p5.png', title: '싱크대 물 안 내려갈 때 해결법', likes: 24, cmts: 0, s: ['싱크대 물이 천천히 내려감', '트랩을 분리해 찌꺼기를 제거', '물이 막힘 없이 내려감', '음식물 찌꺼기는 바로 버린다'] },
+  { id: 'b6', img: '/img/p6.png', title: '현관문 외풍 막는 방법', likes: 24, cmts: 0, s: ['현관 쪽에서 외풍이 느껴짐', '문 아래에 틈막이를 설치', '바람이 거의 들어오지 않음', '틈막이는 문 폭에 맞게 자른다'] }
 ];
+const DEFIMG = '/img/post-image.jpg';
 const HG = '/img/dw-heart16.svg', HF = '/img/dw-heartfull16.svg', CG = '/img/dw-chat16.svg', CO = '/img/dw-chat16-on.svg';
 const H = ['상황', '선택', '결과', '한 줄 팁'];
 const EMPTY = { title: '', sit: '', cho: '', res: '', tip: '', memo: '', photos: 0 };
@@ -51,7 +52,7 @@ class Component extends DCLogic {
     const all = mine.map((m) => ({ id: m.id, title: m.title, author: me, likes: 0, cmts: (cmx[m.id] || []).length, own: true, s: [m.sit, m.cho, m.res, m.tip], photos: m.photos, raw: m })).concat(BASE.map((b) => ({ ...b, author: '깔끔이', own: s.mineV && b.id === 'b1' }))).filter((x) => removed.indexOf(x.id) < 0);
     const cards = all.map((x) => ({
       title: x.title, author: x.author, likes: x.likes + (liked.indexOf(x.id) >= 0 ? 1 : 0), cmts: x.cmts + (cmx[x.id] || []).length,
-      heartSrc: liked.indexOf(x.id) >= 0 ? HF : HG, cmSrc: (cmx[x.id] || []).length ? CO : CG, hs: liked.indexOf(x.id) >= 0 ? 'color:#ff771a' : '', cs: (cmx[x.id] || []).length ? 'color:#ff771a' : '',
+      img: x.img || DEFIMG, heartSrc: liked.indexOf(x.id) >= 0 ? HF : HG, cmSrc: (cmx[x.id] || []).length ? CO : CG, hs: liked.indexOf(x.id) >= 0 ? 'color:#ff771a' : '', cs: (cmx[x.id] || []).length ? 'color:#ff771a' : '',
       open: () => this.setState({ open: x.id, cmText: '' })
     }));
     const cur = s.open ? all.find((x) => x.id === s.open) : null;
@@ -94,7 +95,7 @@ class Component extends DCLogic {
         }
         this.setState({ write: false, editId: null });
       },
-      hasPost, p: postVals, closePost,
+      hasPost, p: postVals, postImg: (cur && cur.img) || DEFIMG, closePost,
       arcCls: 'dw-arc' + (arc ? ' on' : ''), arcLabel: arc ? '아카이빙 됨' : '아카이빙 하기',
       toggleArc: () => {
         if (!cur) return;
@@ -131,7 +132,7 @@ export default makeScreen(Component, (v) => (
           <Fragment key={__i}>
             <button type="button" className="dw-cd" onClick={c.open} aria-label={c.title}>
               <div className="im">
-                <img src="/img/post-image.jpg" alt="" />
+                <img src={c.img} alt="" />
               </div>
               <b className="tt">
                 {c.title}
@@ -283,7 +284,7 @@ export default makeScreen(Component, (v) => (
               {v.p.title}
             </div>
             <div className="dw-pic">
-              <img src="/img/post-image.jpg" alt="" />
+              <img src={v.postImg} alt="" />
               <div className="dd">
                 <i className="on" />
                 <i />

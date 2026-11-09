@@ -4,7 +4,7 @@ body{margin:0}
 .dw-gl{position:absolute;left:0;top:121px;width:393px;height:624px;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;padding:20px 20px 110px;box-sizing:border-box;display:grid;grid-template-columns:170px 170px;column-gap:12px;grid-auto-rows:224px;row-gap:24px;align-content:start}
 .dw-cd{position:relative;width:170px;height:224px;border-radius:12px;background:#fff;overflow:hidden;padding:0;border:0;text-align:left;cursor:pointer;display:block}
 .dw-cd .im{position:absolute;left:0;top:0;width:170px;height:120px;background:#e6e6e6;overflow:hidden}
-.dw-cd .im img{position:absolute;left:-30px;top:-10px;width:230px;height:172px;max-width:none}
+.dw-cd .im img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;max-width:none}
 .dw-cd .tt{position:absolute;left:12px;top:132px;width:146px;font-size:16px;line-height:24px;font-weight:600;color:#252422;display:block}
 .dw-cd .mt{position:absolute;left:12px;top:196px;width:146px;height:16px;display:flex;align-items:center;justify-content:space-between;font-size:12px;line-height:16px;font-weight:600;color:#939288}
 .dw-cd .mt .ic{width:12px;height:12px;display:block;max-width:none}
@@ -44,7 +44,7 @@ body{margin:0}
 .dw-kb i{position:absolute;left:11px;width:3px;height:3px;border-radius:50%;background:#252422}
 .dw-pt{margin:16px 0 16px;font-family:var(--font-display);font-size:20px;line-height:28px;font-weight:700;color:#000}
 .dw-pic{position:relative;width:312px;height:192px;border-radius:12px;overflow:hidden;margin-bottom:16px}
-.dw-pic img{position:absolute;left:-12px;top:-25px;width:338px;height:254px;max-width:none}
+.dw-pic img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;max-width:none}
 .dw-pic .dd{position:absolute;left:143px;top:174px;display:flex;gap:4px}
 .dw-pic .dd i{width:6px;height:6px;border-radius:50%;background:#f1f0ee}
 .dw-pic .dd i.on{background:#ff771a}
