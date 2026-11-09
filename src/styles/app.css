@@ -10,3 +10,4 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 .qr-panel img { display: block; margin: 0 auto 8px; image-rendering: pixelated; }
 .qr-panel p { margin: 0; font-size: 12px; line-height: 18px; color: #6e6d66; }
 .qr-panel p.u { font-weight: 600; color: #252422; word-break: break-all; margin-bottom: 6px; }
+.stage > div, .stage > div > div:first-child { height: var(--stage-h, 852px) !important; }
