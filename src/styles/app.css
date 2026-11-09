@@ -13,3 +13,6 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 .stage > div, .stage > div > div:first-child { height: var(--stage-h, 852px) !important; }
 .stage > div > div:first-child { width: var(--stage-w, 393px) !important; }
 .stage .wt-tabbar, .stage .wt-topbar { max-width: none; }
+
+/* Bottom sheets: anchored to the real bottom, rounded top, room above the home indicator */
+.stage .sheet { top: auto !important; bottom: 0; height: auto !important; border-radius: 20px 20px 0 0; padding-bottom: calc(24px + 22px) !important; box-sizing: border-box; }
