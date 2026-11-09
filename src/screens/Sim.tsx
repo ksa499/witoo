@@ -115,7 +115,7 @@ class Component extends DCLogic {
     return {
       rootCls: 'sc' + (s.stage === 'intro' || s.stage === 'result' ? ' lt' : ' dk'),
       is: { intro: s.stage === 'intro', result: s.stage === 'result' },
-      isGame, isPick, isTalk: s.stage === 'q', isFeedback: fb,
+      isGame, isPick, isTalk: s.stage === 'q', isTap: s.stage === 'q' || fb, isFeedback: fb,
       showSpeech: s.stage === 'q' || isPick, showFace: !isPick,
       gameTitle: q.title, qNo: s.i + 1, qBar: 'width:' + ((s.i + 1) * 20) + '%',
       bgSrc: B(sceneId),
@@ -229,7 +229,7 @@ export default makeScreen(Component, (v) => (
             <img className="fc" src={v.faceSrc} alt="" />
             </>
           )}
-          {!!v.isTalk && (
+          {!!v.isTap && (
             <>
             <button type="button" className="tap" aria-label="계속하기" onClick={v.advance} />
             </>
