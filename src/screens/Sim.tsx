@@ -72,7 +72,14 @@ class Component extends DCLogic {
   }
   schedule(stage) {
     clearTimeout(this.auto);
-    if (stage === 'q') this.auto = setTimeout(() => { if (this.state.stage === 'q') this.setState({ stage: 'p', pick: -1 }); }, 2600);
+    if (stage === 'q') this.auto = setTimeout(() => { if (this.state.stage === 'q') this.setState({ stage: 'p', pick: -1 }); }, 2000);
+    if (stage === 'fb') this.auto = setTimeout(() => {
+      const s = this.state; if (s.stage !== 'fb') return;
+      const cur = (this.STEPS()[s.i] || {}).choices ? this.STEPS()[s.i].choices[s.pick] : null; if (!cur) return;
+      if (cur.kind === 'fail') this.to('result', { end: 'fail' + cur.fail });
+      else if (s.i >= 4) this.to('result', { end: this.finalEnd(s.picks) });
+      else this.to('q', { i: s.i + 1, pick: -1 });
+    }, 4500);
   }
   componentWillUnmount() { clearTimeout(this.auto); }
   to(stage, extra) { this.setState(Object.assign({ stage }, extra || {})); this.schedule(stage); }
