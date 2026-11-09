@@ -1,0 +1,76 @@
+/* Witoo components — every value comes from tokens.css */
+
+.wt-icon, .wt-logo { display: block; flex: none; }
+
+/* Button ----------------------------------------------------------- */
+.wt-btn {
+  box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; min-height: 59px; /* 24px label + 2 × 16px padding + 2 × 1.5px border */
+  padding: var(--space-16);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans); font-size: 16px; line-height: 24px; font-weight: 600;
+  cursor: pointer;
+  -webkit-appearance: none; appearance: none;
+}
+.wt-btn--auto { width: auto; padding-left: var(--space-24); padding-right: var(--space-24); }
+.wt-btn--primary   { background: var(--primary-500); border-color: var(--primary-600); color: var(--white); }
+.wt-btn--secondary { background: var(--gray-100);    border-color: var(--gray-500);    color: var(--gray-800); }
+.wt-btn--outline   { background: var(--white);       border-color: var(--gray-200);    color: var(--gray-900); }
+.wt-btn--inactive  { background: var(--gray-600);    color: var(--gray-500); cursor: default; }
+.wt-btn--inactive.wt-btn--overlay { background: var(--gray-500); color: var(--gray-200); }
+.wt-btn:focus-visible, .wt-choice:focus-visible, .wt-tab:focus-visible, .wt-topbar__action:focus-visible {
+  outline: 2px solid var(--gray-900); outline-offset: 2px;
+}
+.wt-tabbar--dark .wt-tab:focus-visible { outline-color: var(--gray-100); }
+
+/* ChoiceButton ----------------------------------------------------- */
+.wt-choice {
+  box-sizing: border-box;
+  display: flex; align-items: center; gap: var(--space-8);
+  width: 100%; min-height: 75px;
+  padding: var(--space-24) var(--space-20);
+  border: 1.5px solid transparent; border-radius: var(--radius-md);
+  background: var(--gray-200); color: var(--gray-800);
+  font-family: var(--font-sans); font-size: 16px; line-height: 24px; font-weight: 600; text-align: center;
+  cursor: pointer;
+}
+.wt-choice::after { content: ''; flex: none; width: 20px; } /* mirrors the icon so the label is truly centered */
+.wt-choice--selected { background: var(--secondary-500); border-color: var(--secondary-700); color: var(--secondary-900); }
+.wt-choice__label { flex: 1; min-width: 0; }
+
+/* TabItem / TabBar ------------------------------------------------- */
+.wt-tab {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-4);
+  width: 48px; height: 48px; padding: 0; border: 0; background: none; cursor: pointer;
+  color: var(--gray-500);
+}
+.wt-tab--selected { color: var(--gray-900); }
+.wt-tab--dark { color: var(--gray-700); }
+.wt-tab--dark.wt-tab--selected { color: var(--gray-100); }
+.wt-tab__label { font-family: var(--font-display); font-size: 12px; line-height: 16px; font-weight: 700; white-space: nowrap; }
+
+.wt-tabbar {
+  box-sizing: border-box; width: 100%; max-width: 393px;
+  background: var(--white); border: 1px solid var(--gray-400);
+  padding-bottom: 34px; /* iOS home-bar area */
+}
+.wt-tabbar--flat { padding-bottom: 0; }
+.wt-tabbar--dark { background: var(--gray-900); border-color: var(--gray-800); }
+.wt-tabbar__row { display: flex; justify-content: space-between; align-items: center; padding: var(--space-12) var(--space-20); }
+
+/* TopBar ----------------------------------------------------------- */
+.wt-topbar {
+  box-sizing: border-box; width: 100%; max-width: 393px; min-height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-12) var(--space-20);
+  background: var(--background); color: var(--gray-900);
+}
+.wt-topbar--title { border-bottom: 1px solid var(--gray-400); min-height: 61px; }
+.wt-topbar__title { margin: 0; font-family: var(--font-sans); font-size: 20px; line-height: 28px; font-weight: 600; color: var(--gray-900); }
+.wt-topbar__actions { display: flex; align-items: center; gap: var(--space-8); }
+.wt-topbar__action {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; padding: 0; border: 0; background: none; color: var(--gray-900); cursor: pointer;
+}

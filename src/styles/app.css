@@ -1,0 +1,12 @@
+html, body, #root { margin: 0; height: 100%; background: #f0f0f0; overflow: hidden; }
+body { -webkit-tap-highlight-color: transparent; overscroll-behavior: none; user-select: none; -webkit-user-select: none; font-family: var(--font-sans); }
+input, textarea { user-select: text; -webkit-user-select: text; }
+.stage-wrap { position: fixed; inset: 0; background: #f0f0f0; }
+.stage { position: absolute; left: 50%; top: 50%; transform-origin: center center; overflow: hidden; background: #f0f0f0; }
+@media (min-width: 601px) { .stage { box-shadow: 0 0 0 1px #d4d3cc, 0 12px 40px rgba(0,0,0,.12); } }
+
+.qr-panel { position: absolute; left: calc(50% + 230px); top: 50%; transform: translateY(-50%); width: 248px; padding: 16px; border-radius: 16px; background: #fff; border: 1px solid #d4d3cc; text-align: center; color: #252422; }
+.qr-panel h2 { margin: 0 0 12px; font-size: 16px; line-height: 24px; font-weight: 600; }
+.qr-panel img { display: block; margin: 0 auto 8px; image-rendering: pixelated; }
+.qr-panel p { margin: 0; font-size: 12px; line-height: 18px; color: #6e6d66; }
+.qr-panel p.u { font-weight: 600; color: #252422; word-break: break-all; margin-bottom: 6px; }

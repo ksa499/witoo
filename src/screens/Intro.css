@@ -1,0 +1,1 @@
+body{margin:0} .dot{width:8px;height:8px;border-radius:4px;background:var(--gray-300);transition:width .2s}.dot.on{width:24px;background:var(--primary-500)}
