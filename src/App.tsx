@@ -3,6 +3,8 @@ import Main from './screens/Main';
 import QrPanel from './QrPanel';
 
 const W = 393, H = 852;
+/** The design reserves this much at the top for a mock status bar; real phones have their own. */
+const SB = 54;
 
 const viewport = () => ({ w: window.innerWidth, h: window.innerHeight });
 const editing = () => {
@@ -38,10 +40,11 @@ export default function App() {
   }, []);
 
   const desktop = size.w > 600;
-  const sw = size.w / W, sh = size.h / H;
-  const scale = desktop ? Math.min(1, sw, sh) : Math.max(Math.min(sw, sh), 0.4);
+  const top = desktop ? 0 : SB; // phones: hide the mock status bar area
+  const sw = size.w / W, sh = size.h / (H - top);
+  const scale = desktop ? Math.min(1, sw, size.h / H) : Math.max(Math.min(sw, sh), 0.4);
   const stageW = desktop ? W : Math.max(W, Math.round(size.w / scale));
-  const stageH = desktop ? H : Math.max(H, Math.round(size.h / scale));
+  const stageH = desktop ? H : Math.max(H, Math.round(size.h / scale) + top);
   const extra = stageH - H, extraW = stageW - W;
 
   useLayoutEffect(() => {
@@ -111,7 +114,7 @@ export default function App() {
 
   return (
     <div className="stage-wrap">
-      <div ref={stageRef} className="stage" style={{ width: stageW, height: stageH, transform: `scale(${scale})`, marginLeft: -(stageW / 2), marginTop: -(stageH / 2) }}>
+      <div ref={stageRef} className="stage" style={{ width: stageW, height: stageH, transform: `scale(${scale})`, marginLeft: -(stageW / 2), marginTop: -(stageH / 2) - (top * scale) / 2 }}>
         <Main />
       </div>
       {size.w > 900 && new URLSearchParams(window.location.search).has('qr') && <QrPanel />}
