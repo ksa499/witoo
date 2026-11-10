@@ -4,16 +4,18 @@ import { DCLogic, makeScreen, css } from '../dc';
 import './Splash.css';
 
 class Component extends DCLogic {
+  constructor(props) { super(props); this.state = { out: false }; }
   componentDidMount() {
-    this.t = setTimeout(() => { if (this.props.onGo) this.props.onGo('start'); }, 2000);
+    this.t1 = setTimeout(() => this.setState({ out: true }), 2300);
+    this.t = setTimeout(() => { if (this.props.onGo) this.props.onGo('start'); }, 2900);
   }
-  componentWillUnmount() { clearTimeout(this.t); }
-  renderVals() { return {}; }
+  componentWillUnmount() { clearTimeout(this.t); clearTimeout(this.t1); }
+  renderVals() { return { cls: 'sc' + (this.state.out ? ' sOut' : '') }; }
 }
 
 export default makeScreen(Component, (v) => (
   <>
-    <div className="sc" style={{background: "var(--primary-500)"}}>
+    <div className={v.cls} style={{background: "var(--primary-500)"}}>
       <svg className="lg" viewBox="0 0 393 852" width="393" height="852" fill="#fff" shapeRendering="crispEdges" style={{position: "absolute", left: "0", top: "0"}}>
         <defs>
           <clipPath id="co1">
