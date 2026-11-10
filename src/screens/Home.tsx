@@ -19,7 +19,7 @@ class Component extends DCLogic {
     const solved = d.solved || [];
     const saved = d.problems ? d.problems.filter((q) => solved.indexOf(q.id) < 0) : [{ id: 'washer-2', kind: 'incident' }];
     const st = { live: v === '', view: 'room', sheet: '', sel: 'washer-2', own: own.slice(), problems: v === '' ? saved : [{ id: 'washer-2', kind: 'incident' }, AC],
-      acN: v === 'checked' ? 5 : v === '' ? Math.min(5, 2 + (d.checkN || 0)) : 2, face: 'default', pos: v === '' ? [214, 462] : [213.5, 495], dur: 0, walk: false, shock: false };
+      acN: v === 'checked' ? 5 : v === '' ? Math.min(5, 2 + (d.checkN || 0)) : 2, reveal: v === '' && !!d.reveal, face: 'default', pos: v === '' ? [214, 462] : [213.5, 495], dur: 0, walk: false, shock: false };
     if (v === 'edit') st.view = 'edit';
     if (v === 'notice') st.sheet = 'notice';
     if (v === 'incident') st.sheet = 'incident';
@@ -35,12 +35,16 @@ class Component extends DCLogic {
   }
   componentDidMount() {
     this.t1 = setInterval(() => this.step(), 700);
+    if (this.state.reveal) {
+      if (this.props.onPatch) this.props.onPatch({ reveal: false });
+      this.t5 = setTimeout(() => this.setState({ reveal: false }), 2000);
+    }
     // 처음엔 세탁기만, 잠시 뒤 에어컨 정기점검, 그 뒤로 돌발 상황이 차차 추가
     const sched = (ms, first) => { this.t2 = setTimeout(() => { if (first) this.addCheck(); else this.addIncident(); sched(first ? 7000 : 11000 + Math.random() * 6000, false); }, ms); };
     sched(6000, true);
   }
   componentWillUnmount() {
-    clearInterval(this.t1); clearTimeout(this.t2); clearTimeout(this.t4); this.clearLegs();
+    clearInterval(this.t1); clearTimeout(this.t2); clearTimeout(this.t4); clearTimeout(this.t5); this.clearLegs();
   }
   clearLegs() { (this.legs || []).forEach(clearTimeout); this.legs = []; }
   OVKEYS() { return ['washer-1', 'washer-2', 'vacuum', 'washbasin', 'toilet', 'tv', 'rice-cooker', 'microwave', 'fridge', 'stove', 'kitchen-sink']; }
@@ -199,6 +203,8 @@ class Component extends DCLogic {
       isRoom: s.view === 'room', isEdit: s.view === 'edit',
       sheetNotice: s.view === 'room' && s.sheet === 'notice', sheetIncident: s.view === 'room' && s.sheet === 'incident', sheetCheck: s.view === 'room' && s.sheet === 'check',
       roomTap: (e) => this.roomTap(e),
+      showReveal: !!s.reveal,
+      rvCells: s.reveal ? (() => { const out = []; for (let r = 0; r < 31; r++) for (let c = 0; c < 16; c++) { const d = Math.hypot(c - 7.5, r - 15), t = 0.3 + d / 17.4 * 1.0; out.push({ style: 'left:' + c * 20 + 'px;top:' + r * 20 + 'px;animation-delay:' + t.toFixed(2) + 's' }); } return out; })() : [],
       showTap: !!s.tapK, tapCls: 'tapm ' + (s.tapK % 2 ? 'a' : 'b'), tapStyle: 'left:' + (s.tapX || 0) + 'px;top:' + (s.tapY || 0) + 'px',
       showChar: s.live || probs.length > 0,
       charSrc: B(FACE[s.shock ? 'surprised' : s.face] || FACE.default),
@@ -250,6 +256,17 @@ export default makeScreen(Component, (v) => (
             <>
             <div className={v.charCls} style={css(v.charStyle)}>
               <img src={v.charSrc} alt="" />
+            </div>
+            </>
+          )}
+          {!!v.showReveal && (
+            <>
+            <div className="rv">
+              {(v.rvCells || []).map((c, __i) => (
+                <Fragment key={__i}>
+                  <i style={css(c.style)} />
+                </Fragment>
+              ))}
             </div>
             </>
           )}

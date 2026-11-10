@@ -67,7 +67,7 @@ class Component extends DCLogic {
       const FROM_SETUP = cur === 'setup' && screen === 'home';
       const ld = { drawer: 'drawerload', home: 'homeload' }[screen];
       if (ld && (!variant || FROM_SETUP) && (TAB.includes(cur) || FROM_SETUP) && cur !== screen) {
-        this.setState({ screen: ld, variant: '' });
+        this.setState({ screen: ld, variant: '', data: FROM_SETUP ? { ...this.state.data, reveal: true } : this.state.data });
         clearTimeout(this._dl);
         this._dl = setTimeout(() => { if (this.state.screen === ld) this.setState({ screen, variant: '' }); }, 950);
         return;
