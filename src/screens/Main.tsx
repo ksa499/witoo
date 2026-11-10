@@ -187,7 +187,7 @@ export default makeScreen(Component, (v) => (
               </div>
             </div>
             <div className="dl-t">
-              문 여는 중...
+              방으로 들어가는 중...
             </div>
           </div>
           </>
