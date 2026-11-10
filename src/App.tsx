@@ -47,6 +47,25 @@ export default function App() {
   const stageH = desktop ? H : Math.max(H, Math.round(size.h / scale) + top);
   const extra = stageH - H, extraW = stageW - W;
 
+  // tiny haptic tick on press + fade-in for dim layers that are added on the fly
+  useEffect(() => {
+    const tick = (e: Event) => {
+      if ((e.target as HTMLElement)?.closest?.('button, [role="button"], .wt-btn, .wt-choice, .wt-tab')) navigator.vibrate?.(6);
+    };
+    document.addEventListener('pointerdown', tick, { passive: true });
+    const mo = new MutationObserver((muts) => {
+      muts.forEach((m) => m.addedNodes.forEach((n) => {
+        if (!(n instanceof HTMLElement)) return;
+        [n, ...Array.from(n.querySelectorAll<HTMLElement>('*')).slice(0, 80)].forEach((el) => {
+          const st = el.getAttribute('style') || '';
+          if (/position:\s*absolute/.test(st) && /inset:\s*0/.test(st) && /rgba\(0,\s*0,\s*0/.test(st)) el.classList.add('fx-fade');
+        });
+      }));
+    });
+    if (stageRef.current) mo.observe(stageRef.current, { childList: true, subtree: true });
+    return () => { document.removeEventListener('pointerdown', tick); mo.disconnect(); };
+  }, []);
+
   useLayoutEffect(() => {
     const root = stageRef.current;
     if (!root) return;
@@ -62,6 +81,7 @@ export default function App() {
         delete el.dataset.fx;
       });
       if (!extra && !extraW) return;
+      root.classList.add('measuring'); // measure the resting layout, not mid-animation
       const rb = root.getBoundingClientRect();
       const info = all.map((el) => {
         const abs = getComputedStyle(el).position === 'absolute';
@@ -69,6 +89,7 @@ export default function App() {
         if (!abs && !(extraW && Math.abs(r.width / scale - W) < 2 && (r.left - rb.left) / scale <= 1)) return null;
         return { el, abs, l: (r.left - rb.left) / scale, t: (r.top - rb.top) / scale, w: r.width / scale, h: r.height / scale };
       });
+      root.classList.remove('measuring');
       const dec = new Map<HTMLElement, { moved: boolean; gw: boolean }>();
       const inherit = (el: HTMLElement) => {
         let moved = false, grown = false;
