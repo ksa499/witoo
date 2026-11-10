@@ -204,7 +204,7 @@ class Component extends DCLogic {
       sheetNotice: s.view === 'room' && s.sheet === 'notice', sheetIncident: s.view === 'room' && s.sheet === 'incident', sheetCheck: s.view === 'room' && s.sheet === 'check',
       roomTap: (e) => this.roomTap(e),
       showReveal: !!s.reveal,
-      rvCells: s.reveal ? (() => { const out = []; for (let r = 0; r < 31; r++) for (let c = 0; c < 16; c++) { const d = Math.hypot(c - 7.5, r - 15), t = 0.3 + d / 17.4 * 1.0; out.push({ style: 'left:' + c * 20 + 'px;top:' + r * 20 + 'px;animation-delay:' + t.toFixed(2) + 's' }); } return out; })() : [],
+      rvCells: s.reveal ? (() => { const out = []; for (let r = 0; r < 31; r++) for (let c = 0; c < 17; c++) { const d = Math.hypot(c - 7.6, r - 15.2), t = 0.3 + d / 17.4 * 1.0; out.push({ style: 'left:' + c * 20 + 'px;top:' + r * 20 + 'px;animation-delay:' + t.toFixed(2) + 's' }); } return out; })() : [],
       showTap: !!s.tapK, tapCls: 'tapm ' + (s.tapK % 2 ? 'a' : 'b'), tapStyle: 'left:' + (s.tapX || 0) + 'px;top:' + (s.tapY || 0) + 'px',
       showChar: s.live || probs.length > 0,
       charSrc: B(FACE[s.shock ? 'surprised' : s.face] || FACE.default),
