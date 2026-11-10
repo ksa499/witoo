@@ -23,7 +23,7 @@ class Component extends DCLogic {
     try { const h = (window.location.hash || '').replace('#', '').split('/'); if (h[0]) this.state = { ...this.state, screen: h[0], variant: h[1] || '' }; } catch (e) {}
   }
   renderVals() {
-    const BUILT = ['splash', 'start', 'signup', 'login', 'pwfind', 'intro', 'setup', 'home', 'sim', 'peg', 'drawer', 'my', 'alerts', 'drawerload'];
+    const BUILT = ['splash', 'start', 'signup', 'login', 'pwfind', 'intro', 'setup', 'home', 'sim', 'peg', 'drawer', 'my', 'alerts', 'drawerload', 'homeload'];
     const CAT = [
       ['가입 · 로그인', [
         ['스플래시', 'splash', ''], ['시작하기', 'start', ''],
@@ -63,10 +63,12 @@ class Component extends DCLogic {
     ];
     const s = this.state;
     const go = (screen, variant) => {
-      if (screen === 'drawer' && !variant && this.state.screen !== 'drawer' && this.state.screen !== 'drawerload') {
-        this.setState({ screen: 'drawerload', variant: '' });
+      const cur = this.state.screen, TAB = ['home', 'peg', 'drawer', 'my', 'alerts'];
+      const ld = { drawer: 'drawerload', home: 'homeload' }[screen];
+      if (ld && !variant && TAB.includes(cur) && cur !== screen) {
+        this.setState({ screen: ld, variant: '' });
         clearTimeout(this._dl);
-        this._dl = setTimeout(() => { if (this.state.screen === 'drawerload') this.setState({ screen: 'drawer', variant: '' }); }, 950);
+        this._dl = setTimeout(() => { if (this.state.screen === ld) this.setState({ screen, variant: '' }); }, 950);
         return;
       }
       this.setState({ screen, variant: variant || '' });
@@ -168,6 +170,23 @@ export default makeScreen(Component, (v) => (
             </div>
             <div className="dl-t">
               서랍 여는 중...
+            </div>
+          </div>
+          </>
+        )}
+        {!!v.is.homeload && (
+          <>
+          <div className="sc dl">
+            <div className="dl-door">
+              <div className="dl-frame">
+                <div className="dl-in" />
+                <div className="dl-leaf">
+                  <i />
+                </div>
+              </div>
+            </div>
+            <div className="dl-t">
+              문 여는 중...
             </div>
           </div>
           </>
