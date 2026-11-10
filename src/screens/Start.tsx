@@ -17,14 +17,20 @@ export default makeScreen(Component, (v) => (
       <div className="hero">
         <div className="hfl" />
         <div className="hsh" />
-        <img className="hch" src="/img/face-default.svg" alt="" />
-        <img className="hsp" src="/img/tool-sponge.svg" alt="" style={{width: "48px"}} />
-        <img className="hbb" src="/img/tool-bubble.svg" alt="" style={{left: "58px", top: "236px", width: "20px", animationDelay: "0s"}} />
-        <img className="hbb" src="/img/tool-bubble.svg" alt="" style={{left: "96px", top: "250px", width: "20px", animationDelay: ".8s"}} />
-        <img className="hbb" src="/img/tool-bubble.svg" alt="" style={{left: "44px", top: "262px", width: "20px", animationDelay: "1.6s"}} />
-        <img className="hwr" src="/img/tool-wrench.svg" alt="" style={{width: "40px"}} />
-        <img className="hsk" src="/img/tool-spark.svg" alt="" style={{left: "292px", top: "196px", width: "24px"}} />
-        <img className="hsk" src="/img/tool-spark.svg" alt="" style={{left: "322px", top: "222px", width: "18px", animationDelay: ".1s"}} />
+        <div className="hch">
+          <img src="/img/face-default.svg" alt="" />
+          <img className="hf hf1" src="/img/face-sleepy.svg" alt="" />
+          <img className="hf hf2" src="/img/face-happy.svg" alt="" />
+          <img className="hf hf3" src="/img/face-wink.svg" alt="" />
+          <img className="hf hf4" src="/img/face-surprised.svg" alt="" />
+        </div>
+        <img className="hsp" src="/img/tool-sponge.svg" alt="" />
+        <img className="hbb" src="/img/tool-bubble.svg" alt="" style={{left: "46px", top: "222px"}} />
+        <img className="hbb" src="/img/tool-bubble.svg" alt="" style={{left: "92px", top: "236px", animationDelay: ".8s"}} />
+        <img className="hbb" src="/img/tool-bubble.svg" alt="" style={{left: "34px", top: "250px", animationDelay: "1.6s"}} />
+        <img className="hwr" src="/img/tool-wrench.svg" alt="" />
+        <img className="hsk" src="/img/tool-spark.svg" alt="" style={{left: "300px", top: "176px"}} />
+        <img className="hsk" src="/img/tool-spark.svg" alt="" style={{left: "330px", top: "210px", animationDelay: ".1s"}} />
       </div>
       <div style={{position: "absolute", left: "20px", top: "484px", width: "353px", display: "flex", flexDirection: "column", gap: "12px"}}>
         <div style={{fontFamily: "var(--font-display)", fontWeight: "700", fontSize: "24px", lineHeight: "32px"}}>

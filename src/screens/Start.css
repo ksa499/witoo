@@ -3,14 +3,14 @@ body{margin:0}
 .hero .hfl{position:absolute;left:0;right:0;bottom:0;height:84px;background:#f1e4c3;border-top:4px solid #e2cf9f}
 .hero .hsh{position:absolute;left:118px;top:372px;width:156px;height:12px;background:rgba(0,0,0,.10);animation:hSh .8s steps(2,end) infinite}
 .hero img{position:absolute;image-rendering:pixelated}
-.hero .hch{left:66px;top:96px;width:261px;height:288px;animation:hBob .8s steps(2,end) infinite}
-.hero .hwr{left:262px;top:226px;transform-origin:50% 90%;animation:hWr 1.6s steps(4,end) infinite}
-.hero .hsp{left:36px;top:250px;animation:hSp 1.6s steps(4,end) infinite}
+.hero .hch{position:absolute;left:66px;top:96px;width:261px;height:288px;animation:hBob .8s steps(2,end) infinite}.hero .hch img{left:0;top:0;width:261px;height:288px}.hero .hf{opacity:0}.hero .hf1{animation:hF1 6.4s steps(1,end) infinite}.hero .hf2{animation:hF2 6.4s steps(1,end) infinite}.hero .hf3{animation:hF3 6.4s steps(1,end) infinite}.hero .hf4{animation:hF4 6.4s steps(1,end) infinite}
+.hero .hwr{left:262px;top:178px;transform-origin:50% 90%;animation:hWr 1.6s steps(4,end) infinite}
+.hero .hsp{left:26px;top:238px;animation:hSp 1.6s steps(4,end) infinite}
 .hero .hsk{animation:hSk 1.6s steps(1,end) infinite}
 .hero .hbb{animation:hBb 2.4s steps(6,end) infinite}
-@keyframes hBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes hF1{0%,17%{opacity:0}18%,20%{opacity:1}21%,61%{opacity:0}62%,64%{opacity:1}65%,100%{opacity:0}}@keyframes hF2{0%,29%{opacity:0}30%,47%{opacity:1}48%,100%{opacity:0}}@keyframes hF3{0%,51%{opacity:0}52%,58%{opacity:1}59%,100%{opacity:0}}@keyframes hF4{0%,77%{opacity:0}78%,86%{opacity:1}87%,100%{opacity:0}}@keyframes hBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 @keyframes hSh{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.9)}}
-@keyframes hWr{0%{transform:rotate(-38deg)}50%{transform:rotate(14deg)}100%{transform:rotate(-38deg)}}
+@keyframes hWr{0%{transform:rotate(-4deg)}50%{transform:rotate(30deg)}100%{transform:rotate(-4deg)}}
 @keyframes hSp{0%{transform:translate(0,0)}25%{transform:translate(16px,-14px)}50%{transform:translate(32px,0)}75%{transform:translate(16px,14px)}100%{transform:translate(0,0)}}
 @keyframes hSk{0%,44%{opacity:0}50%,75%{opacity:1}76%,100%{opacity:0}}
 @keyframes hBb{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-70px);opacity:0}}
