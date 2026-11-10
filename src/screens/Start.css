@@ -3,7 +3,7 @@ body{margin:0}
 .hero .hfl{position:absolute;left:0;right:0;bottom:0;height:84px;background:#f1e4c3;border-top:4px solid #e2cf9f}
 .hero .hsh{position:absolute;left:118px;top:372px;width:156px;height:12px;background:rgba(0,0,0,.10);animation:hSh .8s steps(2,end) infinite}
 .hero img{position:absolute;image-rendering:pixelated}
-.hero .hch{position:absolute;left:66px;top:96px;width:261px;height:288px;animation:hBob .8s steps(2,end) infinite}.hero .hch img{left:0;top:0;width:261px;height:288px}.hero .hf{opacity:0}.hero .hf1{animation:hF1 6.4s steps(1,end) infinite}.hero .hf2{animation:hF2 6.4s steps(1,end) infinite}.hero .hf3{animation:hF3 6.4s steps(1,end) infinite}.hero .hf4{animation:hF4 6.4s steps(1,end) infinite}
+.hero .hch{position:absolute;left:66px;top:96px;width:261px;height:288px;animation:hBob .8s steps(2,end) infinite}.hero .hch img{left:0;top:0;width:261px;height:288px}.hero .hf{opacity:0}.hero .hf1{animation:hF1 11s steps(1,end) infinite}.hero .hf2{animation:hF2 11s steps(1,end) infinite}.hero .hf3{animation:hF3 11s steps(1,end) infinite}.hero .hf4{animation:hF4 11s steps(1,end) infinite}
 .hero .hwr{left:262px;top:178px;transform-origin:50% 90%;animation:hWr 1.6s steps(4,end) infinite}
 .hero .hsp{left:26px;top:238px;animation:hSp 1.6s steps(4,end) infinite}
 .hero .hsk{animation:hSk 1.6s steps(1,end) infinite}
