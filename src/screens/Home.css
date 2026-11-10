@@ -4,6 +4,10 @@ body{margin:0}
 .room img{position:absolute;inset:0;width:100%;height:100%;display:block;image-rendering:pixelated;pointer-events:none}
 .room .hit{position:absolute;padding:0;border:0;background:transparent;cursor:pointer}
 .ch{position:absolute;width:87px;height:96px}
+.tapm{position:absolute;width:16px;height:16px;margin:-8px 0 0 -8px;pointer-events:none;border:4px solid var(--primary-500);box-sizing:border-box;transform:rotate(45deg)}
+.tapm.a{animation:tapA .6s steps(4,end) both}.tapm.b{animation:tapB .6s steps(4,end) both}
+@keyframes tapA{0%{opacity:1;transform:rotate(45deg) scale(.4)}100%{opacity:0;transform:rotate(45deg) scale(1.8)}}
+@keyframes tapB{0%{opacity:1;transform:rotate(45deg) scale(.4)}100%{opacity:0;transform:rotate(45deg) scale(1.8)}}
 .ch.live img{position:static;display:block;width:87px;height:96px}
 .ch.walk img{animation:bob .4s steps(2,end) infinite}
 .ch.shock img{animation:shock .5s steps(2,end) 3}

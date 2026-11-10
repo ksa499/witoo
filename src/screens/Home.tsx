@@ -57,7 +57,7 @@ class Component extends DCLogic {
     for (let i = 0; i <= n; i++) { const k = n ? i / n : 0; if (!this.free(a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k)) return false; }
     return true;
   }
-  route(from) {
+  route(from, target) {
     const G = 8, X0 = 28, Y0 = 214;
     const ci = Math.round((from[0] - X0) / G), cj = Math.round((from[1] - Y0) / G);
     const pos = (i, j) => [X0 + i * G, Y0 + j * G];
@@ -73,9 +73,17 @@ class Component extends DCLogic {
         seen[k] = true; prev[k] = i + ',' + j; q.push([ni, nj]);
       }
     }
-    const far = order.filter(([i, j]) => Math.hypot(pos(i, j)[0] - from[0], pos(i, j)[1] - from[1]) > 50);
-    if (!far.length) return null;
-    const [ti, tj] = far[Math.floor(Math.random() * far.length)];
+    let ti, tj;
+    if (target) {
+      let best = null, bd = 1e9;
+      order.forEach(([i, j]) => { const d = Math.hypot(pos(i, j)[0] - target[0], pos(i, j)[1] - target[1]); if (d < bd) { bd = d; best = [i, j]; } });
+      if (!best || Math.hypot(pos(best[0], best[1])[0] - from[0], pos(best[0], best[1])[1] - from[1]) < 6) return null;
+      ti = best[0]; tj = best[1];
+    } else {
+      const far = order.filter(([i, j]) => Math.hypot(pos(i, j)[0] - from[0], pos(i, j)[1] - from[1]) > 50);
+      if (!far.length) return null;
+      [ti, tj] = far[Math.floor(Math.random() * far.length)];
+    }
     const cells = []; let k = ti + ',' + tj;
     while (k) { const [i, j] = k.split(',').map(Number); cells.unshift(pos(i, j)); k = prev[k]; }
     const pts = [from].concat(cells);
@@ -120,23 +128,40 @@ class Component extends DCLogic {
     if (!s.live || s.view !== 'room' || this.busy || now < this.hold || now < this.idleUntil) return;
     const pts = this.route(s.pos);
     if (!pts) { this.idleUntil = now + 2000; return; }
+    this.run(pts, false);
+  }
+  run(pts, tapped) {
     const faces = ['default', 'happy', 'wink', 'love', 'sleepy', 'confused', 'happy', 'default'];
-    const SPEED = 34;
+    const SPEED = tapped ? 46 : 34;
     this.busy = true;
     let delay = 0;
     for (let i = 1; i < pts.length; i++) {
       const from = pts[i - 1], to = pts[i], dur = Math.hypot(to[0] - from[0], to[1] - from[1]) / SPEED, last = i === pts.length - 1;
-      const face = i === 1 || Math.random() < 0.4 ? faces[Math.floor(Math.random() * faces.length)] : null;
+      const face = tapped ? (i === 1 ? 'happy' : null) : (i === 1 || Math.random() < 0.4 ? faces[Math.floor(Math.random() * faces.length)] : null);
       this.legs.push(setTimeout(() => {
         this.leg = { t0: Date.now(), from, to, dur };
         this.setState(Object.assign({ pos: to, dur, walk: true, shock: false }, face ? { face } : {}));
       }, delay * 1000));
       delay += dur;
       if (last) this.legs.push(setTimeout(() => {
-        this.leg = null; this.busy = false; this.idleUntil = Date.now() + 1500 + Math.random() * 2500;
-        this.setState({ walk: false, face: faces[Math.floor(Math.random() * faces.length)] });
+        this.leg = null; this.busy = false; this.idleUntil = Date.now() + (tapped ? 3500 : 1500) + Math.random() * 2500;
+        this.setState({ walk: false, face: tapped ? 'love' : faces[Math.floor(Math.random() * faces.length)] });
       }, delay * 1000));
     }
+  }
+  roomTap(e) {
+    const s = this.state, now = Date.now();
+    if (!s.live || s.view !== 'room' || s.sheet || now < this.hold) return;
+    if (e.target && e.target.closest && e.target.closest('.hit')) return;
+    const el = e.currentTarget, r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width * 319, y = (e.clientY - r.top) / r.height * 610;
+    const cur = this.current();
+    const pts = this.route(cur, [x, y]);
+    this.tapK = (this.tapK || 0) + 1;
+    if (!pts) { this.setState({ tapX: x, tapY: y, tapK: this.tapK }); return; }
+    this.clearLegs(); this.leg = null; this.busy = false;
+    this.setState({ pos: cur, dur: 0, tapX: x, tapY: y, tapK: this.tapK });
+    this.run(pts, true);
   }
   renderVals() {
     this.sync();
@@ -173,6 +198,8 @@ class Component extends DCLogic {
     return {
       isRoom: s.view === 'room', isEdit: s.view === 'edit',
       sheetNotice: s.view === 'room' && s.sheet === 'notice', sheetIncident: s.view === 'room' && s.sheet === 'incident', sheetCheck: s.view === 'room' && s.sheet === 'check',
+      roomTap: (e) => this.roomTap(e),
+      showTap: !!s.tapK, tapCls: 'tapm ' + (s.tapK % 2 ? 'a' : 'b'), tapStyle: 'left:' + (s.tapX || 0) + 'px;top:' + (s.tapY || 0) + 'px',
       showChar: s.live || probs.length > 0,
       charSrc: B(FACE[s.shock ? 'surprised' : s.face] || FACE.default),
       charCls: 'ch live' + (s.walk ? ' walk' : '') + (s.shock ? ' shock' : ''),
@@ -212,7 +239,7 @@ export default makeScreen(Component, (v) => (
         <div style={{position: "absolute", left: "0", top: "60px", width: "393px"}}>
           <WitooDS.TopBar variant="logo" actions={v.topActions} onAction={v.topAction} />
         </div>
-        <div className="room" role="img" aria-label={v.roomLabel}>
+        <div className="room" role="img" aria-label={v.roomLabel} onClick={v.roomTap}>
           <img src="/img/home-room.svg" alt="" />
           {(v.layers || []).map((l, __i) => (
             <Fragment key={__i}>
@@ -224,6 +251,11 @@ export default makeScreen(Component, (v) => (
             <div className={v.charCls} style={css(v.charStyle)}>
               <img src={v.charSrc} alt="" />
             </div>
+            </>
+          )}
+          {!!v.showTap && (
+            <>
+            <div className={v.tapCls} style={css(v.tapStyle)} />
             </>
           )}
           {(v.hits || []).map((h, __i) => (

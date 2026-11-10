@@ -99,6 +99,7 @@ export default function App() {
       all.forEach((el) => { // only elements not handled yet (new ones), parents first
         if (el.dataset.fxd !== undefined) return;
         el.dataset.fxd = '1';
+        if (el.closest('.room')) return; // room contents (character, hotspots) move with the room
         const abs = getComputedStyle(el).position === 'absolute';
         const w = el.offsetWidth, h = el.offsetHeight;
         const { l, t } = pos(el);
