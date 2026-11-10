@@ -23,7 +23,7 @@ class Component extends DCLogic {
     try { const h = (window.location.hash || '').replace('#', '').split('/'); if (h[0]) this.state = { ...this.state, screen: h[0], variant: h[1] || '' }; } catch (e) {}
   }
   renderVals() {
-    const BUILT = ['splash', 'start', 'signup', 'login', 'pwfind', 'intro', 'setup', 'home', 'sim', 'peg', 'drawer', 'my', 'alerts'];
+    const BUILT = ['splash', 'start', 'signup', 'login', 'pwfind', 'intro', 'setup', 'home', 'sim', 'peg', 'drawer', 'my', 'alerts', 'drawerload'];
     const CAT = [
       ['가입 · 로그인', [
         ['스플래시', 'splash', ''], ['시작하기', 'start', ''],
@@ -62,7 +62,15 @@ class Component extends DCLogic {
       ['알림', [['알림 목록', 'alerts', ''], ['알림 없음', 'alerts', 'empty']]]
     ];
     const s = this.state;
-    const go = (screen, variant) => this.setState({ screen, variant: variant || '' });
+    const go = (screen, variant) => {
+      if (screen === 'drawer' && !variant && this.state.screen !== 'drawer' && this.state.screen !== 'drawerload') {
+        this.setState({ screen: 'drawerload', variant: '' });
+        clearTimeout(this._dl);
+        this._dl = setTimeout(() => { if (this.state.screen === 'drawerload') this.setState({ screen: 'drawer', variant: '' }); }, 950);
+        return;
+      }
+      this.setState({ screen, variant: variant || '' });
+    };
     const patch = (o) => this.setState({ data: { ...this.state.data, ...o } });
     const is = {};
     for (const b of BUILT) is[b] = s.screen === b;
@@ -147,6 +155,23 @@ export default makeScreen(Component, (v) => (
         {!!v.is.alerts && (
           <>
           <Alerts variant={v.variant} data={v.data} onGo={v.go} onPatch={v.patch} />
+          </>
+        )}
+        {!!v.is.drawerload && (
+          <>
+          <div className="sc dl">
+            <div className="dl-box">
+              <div className="dl-body" />
+              <div className="dl-card" />
+              <div className="dl-card b" />
+              <div className="dl-front">
+                <i />
+              </div>
+            </div>
+            <div className="dl-t">
+              서랍을 열고 있어요
+            </div>
+          </div>
           </>
         )}
         {!!v.missing && (
