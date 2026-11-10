@@ -14,7 +14,18 @@ class Component extends DCLogic {
 export default makeScreen(Component, (v) => (
   <>
     <div className="sc">
-      <img src="/img/problem.png" alt="" style={{position: "absolute", left: "0", top: "0", width: "393px", height: "452px", objectFit: "cover", objectPosition: "center top"}} />
+      <div className="hero">
+        <div className="hfl" />
+        <div className="hsh" />
+        <img className="hch" src="/img/face-default.svg" alt="" />
+        <img className="hsp" src="/img/tool-sponge.svg" alt="" style={{width: "48px"}} />
+        <img className="hbb" src="/img/tool-bubble.svg" alt="" style={{left: "58px", top: "236px", width: "20px", animationDelay: "0s"}} />
+        <img className="hbb" src="/img/tool-bubble.svg" alt="" style={{left: "96px", top: "250px", width: "20px", animationDelay: ".8s"}} />
+        <img className="hbb" src="/img/tool-bubble.svg" alt="" style={{left: "44px", top: "262px", width: "20px", animationDelay: "1.6s"}} />
+        <img className="hwr" src="/img/tool-wrench.svg" alt="" style={{width: "40px"}} />
+        <img className="hsk" src="/img/tool-spark.svg" alt="" style={{left: "292px", top: "196px", width: "24px"}} />
+        <img className="hsk" src="/img/tool-spark.svg" alt="" style={{left: "322px", top: "222px", width: "18px", animationDelay: ".1s"}} />
+      </div>
       <div style={{position: "absolute", left: "20px", top: "484px", width: "353px", display: "flex", flexDirection: "column", gap: "12px"}}>
         <div style={{fontFamily: "var(--font-display)", fontWeight: "700", fontSize: "24px", lineHeight: "32px"}}>
           생활 속 문제,
