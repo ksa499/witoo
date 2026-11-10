@@ -162,8 +162,6 @@ export default makeScreen(Component, (v) => (
           <div className="sc dl">
             <div className="dl-box">
               <div className="dl-body" />
-              <div className="dl-card" />
-              <div className="dl-card b" />
               <div className="dl-front">
                 <i />
               </div>
