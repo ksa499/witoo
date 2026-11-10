@@ -30,7 +30,7 @@ class Component extends DCLogic {
       dots: [0, 1, 2].map((n) => ({ cls: 'dot' + (n === i ? ' on' : '') })),
       skip: () => { if (p.onGo) p.onGo('setup'); },
       next: () => { if (i < 2) this.go(i + 1); else if (p.onGo) p.onGo('setup'); },
-      colCls: 'col ' + this.state.mv, imgCls: this.state.mv,
+      colCls: 'col ' + this.state.mv, imgCls: this.state.mv ? this.state.mv.replace('mv-', 'ch-') : 'ch-i',
       swDown: (e) => { this._sx = e.clientX; this._sy = e.clientY; },
       swUp: (e) => {
         if (this._sx == null) return;
