@@ -69,67 +69,61 @@ export default function App() {
   useLayoutEffect(() => {
     const root = stageRef.current;
     if (!root) return;
+    root.style.setProperty('--stage-h', stageH + 'px');
+    root.style.setProperty('--stage-w', stageW + 'px');
     let raf = 0;
-    const apply = () => {
+    // layout position (ignores transforms and animations, so nothing flickers while measuring)
+    const pos = (el: HTMLElement) => {
+      let l = 0, t = 0;
+      for (let e: HTMLElement | null = el; e && e !== root; e = e.offsetParent as HTMLElement | null) { l += e.offsetLeft; t += e.offsetTop; }
+      return { l, t };
+    };
+    const inherit = (el: HTMLElement) => {
+      let moved = false;
+      for (let a = el.parentElement; a && a !== root; a = a.parentElement) {
+        if (a.dataset.fxm) moved = true;
+        const oy = getComputedStyle(a).overflowY;
+        if (oy === 'auto' || oy === 'scroll') moved = true; // content inside scroll areas stays put
+      }
+      return moved;
+    };
+    const process = (full: boolean) => {
       raf = 0;
-      root.style.setProperty('--stage-h', stageH + 'px');
-      root.style.setProperty('--stage-w', stageW + 'px');
       const all = Array.from(root.querySelectorAll<HTMLElement>('*'));
-      all.forEach((el) => { // reset previous adjustments
-        if (el.dataset.fx === undefined) return;
+      if (full) all.forEach((el) => {
+        if (el.dataset.fxd === undefined) return;
         el.style.translate = ''; el.style.width = el.dataset.fw || ''; el.style.height = el.dataset.fh || '';
-        delete el.dataset.fx;
+        delete el.dataset.fxd; delete el.dataset.fxm;
       });
-      if (!extra && !extraW) return;
-      root.classList.add('measuring'); // measure the resting layout, not mid-animation
-      const rb = root.getBoundingClientRect();
-      const info = all.map((el) => {
+      if (!extra && !extraW) { all.forEach((el) => { el.dataset.fxd = '1'; }); return; }
+      all.forEach((el) => { // only elements not handled yet (new ones), parents first
+        if (el.dataset.fxd !== undefined) return;
+        el.dataset.fxd = '1';
         const abs = getComputedStyle(el).position === 'absolute';
-        const r = el.getBoundingClientRect();
-        if (!abs && !(extraW && Math.abs(r.width / scale - W) < 2 && (r.left - rb.left) / scale <= 1)) return null;
-        return { el, abs, l: (r.left - rb.left) / scale, t: (r.top - rb.top) / scale, w: r.width / scale, h: r.height / scale };
-      });
-      root.classList.remove('measuring');
-      const dec = new Map<HTMLElement, { moved: boolean; gw: boolean }>();
-      const inherit = (el: HTMLElement) => {
-        let moved = false, grown = false;
-        for (let a = el.parentElement; a && a !== root; a = a.parentElement) {
-          const d = dec.get(a);
-          if (d?.moved) moved = true;
-          const oy = getComputedStyle(a).overflowY;
-          if (oy === 'auto' || oy === 'scroll') moved = true; // content inside scroll areas stays put
-          if (d?.gw) grown = true;
-        }
-        return { moved, grown };
-      };
-      info.forEach((o) => {
-        if (!o) return;
-        const { el, abs, l, t, w, h } = o;
-        const { moved, grown } = inherit(el);
-        if (moved) return;
+        const w = el.offsetWidth, h = el.offsetHeight;
+        const { l, t } = pos(el);
+        const fullW = l <= 1 && w >= W - 2 && w <= W + 2;
+        if (!abs && !(extraW && fullW)) return;
+        if (inherit(el)) return;
         let dx = 0, dy = 0, gw = false, gh = false;
-        if (!abs) { dec.set(el, { moved: false, gw: true }); el.dataset.fx = '1'; el.dataset.fw = el.style.width; el.dataset.fh = el.style.height; el.style.width = (w + extraW) + 'px'; return; }
-        const fullW = l <= 1 && w >= W - 2;
-        if (extra) {
+        if (extra && abs) {
           if (t <= 1 && t + h >= H - 3 && w >= W - 2) gh = true;
           else if (t >= 480 && t + h >= 600 && t + h <= H + 2) dy = extra;
         }
         if (extraW) {
-          if (fullW) gw = true; else dx = extraW / 2;
+          if (fullW) gw = true; else if (abs) dx = extraW / 2;
         }
         if (!dx && !dy && !gw && !gh) return;
-        dec.set(el, { moved: !!(dx || dy), gw });
-        el.dataset.fx = '1'; el.dataset.fw = el.style.width; el.dataset.fh = el.style.height;
-        if (dx || dy) el.style.translate = dx + 'px ' + dy + 'px';
+        el.dataset.fw = el.style.width; el.dataset.fh = el.style.height;
+        if (dx || dy) { el.style.translate = dx + 'px ' + dy + 'px'; el.dataset.fxm = '1'; }
         if (gw) el.style.width = (w + extraW) + 'px';
         if (gh) el.style.height = (h + extra) + 'px';
       });
     };
-    const schedule = () => { if (!raf) raf = requestAnimationFrame(apply); };
-    apply();
+    process(true);
+    const schedule = () => { if (!raf) raf = requestAnimationFrame(() => process(false)); };
     const mo = new MutationObserver((muts) => {
-      if (muts.every((m) => m.type === 'attributes')) return;
-      schedule();
+      if (muts.some((m) => m.type === 'childList' && m.addedNodes.length)) schedule();
     });
     mo.observe(root, { childList: true, subtree: true });
     return () => { mo.disconnect(); if (raf) cancelAnimationFrame(raf); };
