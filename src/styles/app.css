@@ -21,21 +21,21 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 :root { --ease-out: cubic-bezier(.22, 1, .36, 1); --ease-spring: cubic-bezier(.34, 1.56, .64, 1); }
 .stage, .stage * { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
 
-/* press feedback */
-.stage button, .stage [role="button"], .stage .wt-btn, .stage .wt-choice, .stage .wt-tab {
-  cursor: pointer;
-  transition: scale .22s var(--ease-spring), background-color .28s ease, border-color .28s ease, color .28s ease, opacity .28s ease, box-shadow .28s ease;
+/* press feedback: only on the design-system buttons and choices (never on tap areas / hotspots) */
+.stage .wt-btn, .stage .wt-choice {
+  transition: scale .2s var(--ease-out), background-color .28s ease, border-color .28s ease, color .28s ease, opacity .28s ease;
 }
-.stage button:active, .stage [role="button"]:active, .stage .wt-btn:active, .stage .wt-choice:active, .stage .wt-tab:active { scale: .95; transition-duration: .08s; }
+.stage .wt-btn:active, .stage .wt-choice:active { scale: .97; transition-duration: .08s; }
+.stage button { transition: background-color .25s ease, opacity .25s ease; }
 
-@keyframes fxScreen { from { opacity: 0; transform: translateY(16px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes fxScreen { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fxUp { from { transform: translateY(60%); opacity: .4; } to { transform: none; opacity: 1; } }
 @keyframes fxFade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes fxPop { from { opacity: 0; transform: translateY(12px) scale(.92); } to { opacity: 1; transform: none; } }
 @keyframes fxRise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 @keyframes fxBounce { 0% { transform: scale(.7); } 55% { transform: scale(1.18); } 100% { transform: scale(1); } }
 
-.stage .sc { animation: fxScreen .5s var(--ease-out) backwards; }
+.stage .sc { animation: fxScreen .3s ease-out backwards; }
 .stage .sheet, .stage .dw-sh { animation: fxUp .5s var(--ease-out) backwards; }
 .stage .dw-ov, .stage .fx-fade { animation: fxFade .3s ease backwards; }
 .stage .dw-pm { animation: fxPop .45s var(--ease-spring) backwards; }
@@ -47,7 +47,6 @@ input, textarea { user-select: text; -webkit-user-select: text; }
 .stage .dw-cd:nth-child(2) { animation-delay: .05s; } .stage .dw-cd:nth-child(3) { animation-delay: .1s; }
 .stage .dw-cd:nth-child(4) { animation-delay: .15s; } .stage .dw-cd:nth-child(5) { animation-delay: .2s; }
 .stage .dw-cd:nth-child(n+6) { animation-delay: .25s; }
-.stage .wt-tab--selected .wt-icon { animation: fxBounce .5s var(--ease-spring); }
 .stage .pg .b i { transition: width .7s var(--ease-out); }
 
 @media (prefers-reduced-motion: reduce) {

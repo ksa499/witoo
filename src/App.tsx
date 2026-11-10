@@ -50,7 +50,7 @@ export default function App() {
   // tiny haptic tick on press + fade-in for dim layers that are added on the fly
   useEffect(() => {
     const tick = (e: Event) => {
-      if ((e.target as HTMLElement)?.closest?.('button, [role="button"], .wt-btn, .wt-choice, .wt-tab')) navigator.vibrate?.(6);
+      if ((e.target as HTMLElement)?.closest?.('.wt-btn, .wt-choice')) navigator.vibrate?.(6);
     };
     document.addEventListener('pointerdown', tick, { passive: true });
     const mo = new MutationObserver((muts) => {
