@@ -7,7 +7,7 @@ import './Start.css';
 class Component extends DCLogic {
   renderVals() {
     const go = (s) => () => { if (this.props.onGo) this.props.onGo(s); };
-    return { toSignup: go('signup'), toLogin: go('login') };
+    return { toSignup: go('intro'), toLogin: go('login') };
   }
 }
 
