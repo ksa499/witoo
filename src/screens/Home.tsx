@@ -114,7 +114,7 @@ class Component extends DCLogic {
     if (this.props.onPatch) this.props.onPatch({ problems: np });
     this.setState({ problems: np, face: 'surprised', shock: true, walk: false, pos: cur, dur: 0.05 });
     clearTimeout(this.t4);
-    this.t4 = setTimeout(() => this.setState({ shock: false }), 1600);
+    this.t4 = setTimeout(() => this.setState({ shock: false, face: 'default' }), 1600);
   }
   addCheck() {
     const s = this.state;

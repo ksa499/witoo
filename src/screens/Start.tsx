@@ -22,7 +22,6 @@ export default makeScreen(Component, (v) => (
           <img className="hf hf1" src="/img/face-sleepy.svg" alt="" />
           <img className="hf hf2" src="/img/face-happy.svg" alt="" />
           <img className="hf hf3" src="/img/face-wink.svg" alt="" />
-          <img className="hf hf4" src="/img/face-surprised.svg" alt="" />
         </div>
         <img className="hsp" src="/img/tool-sponge.svg" alt="" />
         <img className="hbb" src="/img/tool-bubble.svg" alt="" style={{left: "46px", top: "222px"}} />
