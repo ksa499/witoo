@@ -22,6 +22,15 @@ body{margin:0}
 @keyframes shk{0%{translate:0 0}10%{translate:-6px 3px}20%{translate:6px -3px}30%{translate:-5px -2px}40%{translate:5px 3px}50%{translate:-3px 2px}60%{translate:3px -2px}70%{translate:-2px 1px}80%{translate:2px -1px}100%{translate:0 0}}
 .rd{position:absolute;inset:0;background:rgba(255,30,30,.2);pointer-events:none;animation:rdA 1.4s ease-out both}
 @keyframes rdA{0%{opacity:0}12%{opacity:1}30%{opacity:.35}45%{opacity:1}100%{opacity:0}}
+.dr{position:absolute;left:205px;top:139px;width:91px;height:41px;overflow:hidden;pointer-events:none}
+.dr .op{position:absolute;inset:0;background:#fff8e0;box-shadow:inset 0 5px 0 #e8dcb4}
+.dr .pl,.dr .pr{position:absolute;top:0;height:41px;overflow:hidden}
+.dr .pl{left:0;width:46px}.dr .pr{left:46px;width:45px}
+.dr .pl img,.dr .pr img{position:absolute;top:-139px;width:319px;height:610px;max-width:none;image-rendering:pixelated}
+.dr .pl img{left:-205px}.dr .pr img{left:-251px}
+.dr .pr.o{animation:drO .6s steps(6,end) both}.dr .pr.c{animation:drC .6s steps(6,end) both}
+@keyframes drO{from{transform:translateX(0)}to{transform:translateX(-45px)}}
+@keyframes drC{from{transform:translateX(-45px)}to{transform:translateX(0)}}
 .pop{position:absolute;left:0;top:0;width:319px;height:610px;pointer-events:none;animation:popA 1.2s ease-in-out both}
 .pop img{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
 @keyframes popA{0%{transform:scale(1)}25%{transform:scale(1.35)}50%{transform:scale(1)}70%{transform:scale(1.2)}100%{transform:scale(1)}}

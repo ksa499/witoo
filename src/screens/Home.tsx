@@ -44,7 +44,7 @@ class Component extends DCLogic {
     sched(6000, true);
   }
   componentWillUnmount() {
-    clearInterval(this.t1); clearTimeout(this.t2); clearTimeout(this.t4); clearTimeout(this.t5); clearTimeout(this.t6); this.clearLegs();
+    clearInterval(this.t1); clearTimeout(this.t2); clearTimeout(this.t4); clearTimeout(this.t5); clearTimeout(this.t6); clearTimeout(this.td); this.clearLegs();
   }
   clearLegs() { (this.legs || []).forEach(clearTimeout); this.legs = []; }
   OVKEYS() { return ['washer-1', 'washer-2', 'vacuum', 'washbasin', 'toilet', 'tv', 'rice-cooker', 'microwave', 'fridge', 'stove', 'kitchen-sink']; }
@@ -105,6 +105,31 @@ class Component extends DCLogic {
     const k = Math.min(1, (Date.now() - l.t0) / Math.max(1, l.dur * 1000));
     return [l.from[0] + (l.to[0] - l.from[0]) * k, l.from[1] + (l.to[1] - l.from[1]) * k];
   }
+  openDoor() { clearTimeout(this.td); if (this.state.door !== 'o') this.setState({ door: 'o' }); }
+  closeDoor() {
+    if (!this.state.door || this.state.door === 'c') return;
+    this.setState({ door: 'c' }); clearTimeout(this.td);
+    this.td = setTimeout(() => this.setState({ door: '' }), 700);
+  }
+  zone(p) { return p[1] < 125 ? 'balc' : p[1] < 214 ? 'door' : 'room'; }
+  balcPt() { return [34 + Math.random() * 216, 110 + Math.random() * 7]; }
+  // from the balcony / doorway back to the room side of the sliding door
+  toRoom(cur) {
+    const A = [272, 216], C = [272, 118], pts = [cur], acts = {};
+    if (this.zone(cur) === 'balc') { pts.push(C); acts[1] = { wait: 650, fn: () => this.openDoor() }; }
+    pts.push(A); acts[pts.length - 1] = { wait: 0, fn: () => this.closeDoor() };
+    return { pts, acts };
+  }
+  // from the room through the sliding door onto the balcony
+  toBalc(cur) {
+    const A = [272, 216], C = [272, 118], acts = {};
+    const pts = this.route(cur, A) || [cur];
+    const l = pts[pts.length - 1];
+    if (Math.hypot(l[0] - A[0], l[1] - A[1]) > 2) pts.push(A);
+    acts[pts.length - 1] = { wait: 650, fn: () => this.openDoor() };
+    pts.push(C); acts[pts.length - 1] = { wait: 0, fn: () => this.closeDoor() };
+    return { pts, acts };
+  }
   addIncident() {
     const s = this.state;
     if (!s.live || s.view !== 'room') return;
@@ -112,7 +137,7 @@ class Component extends DCLogic {
     if (!open.length || s.problems.filter((p) => p.kind === 'incident').length >= 3) return;
     const id = open[Math.floor(Math.random() * open.length)];
     const cur = this.current();
-    this.clearLegs(); this.leg = null; this.busy = false;
+    this.clearLegs(); this.leg = null; this.busy = false; this.closeDoor();
     this.hold = Date.now() + 2800; this.idleUntil = this.hold;
     const np = s.problems.concat({ id, kind: 'incident' });
     if (this.props.onPatch) this.props.onPatch({ problems: np });
@@ -125,7 +150,7 @@ class Component extends DCLogic {
     const s = this.state;
     if (!s.live || s.view !== 'room' || s.acN >= 5 || s.problems.some((p) => p.id === 'air-conditioner')) return;
     const cur = this.current();
-    this.clearLegs(); this.leg = null; this.busy = false;
+    this.clearLegs(); this.leg = null; this.busy = false; this.closeDoor();
     this.hold = Date.now() + 2800; this.idleUntil = this.hold;
     const np = s.problems.concat({ id: 'air-conditioner', kind: 'check' });
     if (this.props.onPatch) this.props.onPatch({ problems: np });
@@ -137,11 +162,15 @@ class Component extends DCLogic {
   step() {
     const s = this.state, now = Date.now();
     if (!s.live || s.view !== 'room' || this.busy || now < this.hold || now < this.idleUntil) return;
+    const z = this.zone(s.pos);
+    if (z === 'door' || (z === 'balc' && Math.random() < 0.45)) { const a = this.toRoom(s.pos); this.run(a.pts, false, a.acts); return; }
+    if (z === 'balc') { this.run([s.pos, this.balcPt()], false); return; }
+    if (Math.random() < 0.2) { const a = this.toBalc(s.pos); a.pts.push(this.balcPt()); this.run(a.pts, false, a.acts); return; }
     const pts = this.route(s.pos);
     if (!pts) { this.idleUntil = now + 2000; return; }
     this.run(pts, false);
   }
-  run(pts, tapped) {
+  run(pts, tapped, acts) {
     const faces = ['default', 'happy', 'wink', 'love', 'sleepy', 'confused', 'happy', 'default'];
     const SPEED = tapped ? 46 : 34;
     this.busy = true;
@@ -154,6 +183,8 @@ class Component extends DCLogic {
         this.setState(Object.assign({ pos: to, dur, walk: true, shock: false }, face ? { face } : {}));
       }, delay * 1000));
       delay += dur;
+      const act = acts && acts[i];
+      if (act) { this.legs.push(setTimeout(() => { this.leg = null; this.setState({ walk: false }); if (act.fn) act.fn(); }, delay * 1000)); delay += (act.wait || 0) / 1000; }
       if (last) this.legs.push(setTimeout(() => {
         this.leg = null; this.busy = false; this.idleUntil = Date.now() + (tapped ? 3500 : 1500) + Math.random() * 2500;
         this.setState({ walk: false, face: tapped ? 'love' : faces[Math.floor(Math.random() * faces.length)] });
@@ -167,12 +198,20 @@ class Component extends DCLogic {
     const el = e.currentTarget, r = el.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width * 319, y = (e.clientY - r.top) / r.height * 610;
     const cur = this.current();
-    const pts = this.route(cur, [x, y]);
+    const zc = this.zone(cur);
+    let pts, acts = null;
+    if (y < 125) { // the balcony, through the sliding door
+      const T = [Math.min(290, Math.max(34, x)), Math.min(117, Math.max(110, y))];
+      if (zc === 'balc') pts = [cur, T];
+      else if (zc === 'door') { pts = [cur, [272, 118], T]; acts = { 1: { wait: 0, fn: () => this.closeDoor() } }; }
+      else { const a = this.toBalc(cur); a.pts.push(T); pts = a.pts; acts = a.acts; }
+    } else if (zc === 'room') pts = this.route(cur, [x, y]);
+    else { const a = this.toRoom(cur), r = this.route([272, 216], [x, y]); pts = r ? a.pts.concat(r.slice(1)) : a.pts; acts = a.acts; }
     this.tapK = (this.tapK || 0) + 1;
     if (!pts) { this.setState({ tapX: x, tapY: y, tapK: this.tapK }); return; }
     this.clearLegs(); this.leg = null; this.busy = false;
     this.setState({ pos: cur, dur: 0, tapX: x, tapY: y, tapK: this.tapK });
-    this.run(pts, true);
+    this.run(pts, true, acts);
   }
   renderVals() {
     this.sync();
@@ -215,6 +254,7 @@ class Component extends DCLogic {
       popLayer: OV[s.popId] ? B(OV[s.popId][1]) : '',
       popStyle: OV[s.popId] ? 'transform-origin:' + (OV[s.popId][2] + OV[s.popId][4] / 2) + 'px ' + (OV[s.popId][3] + OV[s.popId][5] / 2) + 'px' : '',
       popClip: OV[s.popId] ? 'clip-path:inset(' + OV[s.popId][3] + 'px ' + (319 - OV[s.popId][2] - OV[s.popId][4]) + 'px ' + (610 - OV[s.popId][3] - OV[s.popId][5]) + 'px ' + OV[s.popId][2] + 'px)' : '',
+      showDoor: !!s.door, prCls: 'pr ' + (s.door === 'c' ? 'c' : 'o'),
       showReveal: !!s.reveal,
       rvCells: s.reveal ? (() => { const out = []; for (let r = 0; r < 31; r++) for (let c = 0; c < 17; c++) { const d = Math.hypot(c - 7.6, r - 15.2), t = 0.3 + d / 17.4 * 1.0; out.push({ style: 'left:' + c * 20 + 'px;top:' + r * 20 + 'px;animation-delay:' + t.toFixed(2) + 's' }); } return out; })() : [],
       showTap: !!s.tapK, tapCls: 'tapm ' + (s.tapK % 2 ? 'a' : 'b'), tapStyle: 'left:' + (s.tapX || 0) + 'px;top:' + (s.tapY || 0) + 'px',
@@ -264,6 +304,19 @@ export default makeScreen(Component, (v) => (
               <img src={l.src} alt="" />
             </Fragment>
           ))}
+          {!!v.showDoor && (
+            <>
+            <div className="dr">
+              <div className="op" />
+              <div className="pl">
+                <img src={v.popBase} alt="" />
+              </div>
+              <div className={v.prCls}>
+                <img src={v.popBase} alt="" />
+              </div>
+            </div>
+            </>
+          )}
           {!!v.showPop && (
             <>
             <div className="pop" style={css(v.popStyle)}>
