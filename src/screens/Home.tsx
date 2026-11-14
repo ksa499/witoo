@@ -17,7 +17,7 @@ class Component extends DCLogic {
     const AC = { id: 'air-conditioner', kind: 'check' };
     const d = this.props.data || {};
     const solved = d.solved || [];
-    const saved = d.problems ? d.problems.filter((q) => solved.indexOf(q.id) < 0) : [{ id: 'washer-2', kind: 'incident' }];
+    const saved = d.problems ? d.problems.filter((q) => solved.indexOf(q.id) < 0) : [];
     const st = { live: v === '', view: 'room', sheet: '', sel: 'washer-2', own: own.slice(), problems: v === '' ? saved : [{ id: 'washer-2', kind: 'incident' }, AC],
       acN: v === 'checked' ? 5 : v === '' ? Math.min(5, 2 + (d.checkN || 0)) : 2, reveal: v === '' && !!d.reveal, face: 'default', pos: v === '' ? [214, 462] : [213.5, 495], dur: 0, walk: false, shock: false };
     if (v === 'edit') st.view = 'edit';
@@ -39,7 +39,7 @@ class Component extends DCLogic {
       if (this.props.onPatch) this.props.onPatch({ reveal: false });
       this.t5 = setTimeout(() => this.setState({ reveal: false }), 2000);
     }
-    // 처음엔 세탁기만, 잠시 뒤 에어컨 정기점검, 그 뒤로 돌발 상황이 차차 추가
+    // 처음엔 문제 없이 시작, 잠시 뒤 에어컨 정기점검, 그 뒤로 돌발 상황이 차차 추가
     const sched = (ms, first) => { this.t2 = setTimeout(() => { if (first) this.addCheck(); else this.addIncident(); sched(first ? 7000 : 11000 + Math.random() * 6000, false); }, ms); };
     sched(6000, true);
   }
@@ -124,9 +124,15 @@ class Component extends DCLogic {
   addCheck() {
     const s = this.state;
     if (!s.live || s.view !== 'room' || s.acN >= 5 || s.problems.some((p) => p.id === 'air-conditioner')) return;
+    const cur = this.current();
+    this.clearLegs(); this.leg = null; this.busy = false;
+    this.hold = Date.now() + 2800; this.idleUntil = this.hold;
     const np = s.problems.concat({ id: 'air-conditioner', kind: 'check' });
     if (this.props.onPatch) this.props.onPatch({ problems: np });
-    this.setState({ problems: np });
+    this.setState({ problems: np, face: 'surprised', shock: true, walk: false, pos: cur, dur: 0.05, alert: true, popId: 'air-conditioner' });
+    clearTimeout(this.t6); this.t6 = setTimeout(() => this.setState({ alert: false, popId: '' }), 1500);
+    clearTimeout(this.t4);
+    this.t4 = setTimeout(() => this.setState({ shock: false, face: 'default' }), 1600);
   }
   step() {
     const s = this.state, now = Date.now();
