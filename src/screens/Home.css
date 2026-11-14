@@ -13,9 +13,20 @@ body{margin:0}
 @keyframes tapB{0%{opacity:1;transform:rotate(45deg) scale(.4)}100%{opacity:0;transform:rotate(45deg) scale(1.8)}}
 .ch.live img{position:static;display:block;width:87px;height:96px}
 .ch.walk img{animation:bob .4s steps(2,end) infinite}
-.ch.shock img{animation:shock .5s steps(2,end) 3}
+.ch.shock img{animation:shock .4s steps(2,end) 4;transform-origin:50% 100%}
+.ch.shock::before,.ch.shock::after{content:'';position:absolute;left:40px;background:#e5252a;box-shadow:0 0 0 3px #fff;animation:exB .2s steps(1,end) infinite;z-index:2}
+.ch.shock::before{top:-26px;width:8px;height:16px}
+.ch.shock::after{top:-6px;width:8px;height:6px}
+@keyframes exB{0%{opacity:1}50%{opacity:.25}}
+.sc.shk{animation:shk .6s steps(1,end) both}
+@keyframes shk{0%{translate:0 0}10%{translate:-6px 3px}20%{translate:6px -3px}30%{translate:-5px -2px}40%{translate:5px 3px}50%{translate:-3px 2px}60%{translate:3px -2px}70%{translate:-2px 1px}80%{translate:2px -1px}100%{translate:0 0}}
+.rd{position:absolute;inset:0;background:rgba(255,30,30,.2);pointer-events:none;animation:rdA 1.4s ease-out both}
+@keyframes rdA{0%{opacity:0}12%{opacity:1}30%{opacity:.35}45%{opacity:1}100%{opacity:0}}
+.pop{position:absolute;left:0;top:0;width:319px;height:610px;pointer-events:none;animation:popA 1.2s ease-in-out both}
+.pop img{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+@keyframes popA{0%{transform:scale(1)}25%{transform:scale(1.35)}50%{transform:scale(1)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
 @keyframes bob{0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)}}
-@keyframes shock{0%{transform:translateY(0)}50%{transform:translateY(-12px)}100%{transform:translateY(0)}}
+@keyframes shock{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-22px) scale(1.25)}100%{transform:translateY(0) scale(1)}}
 .fab{position:absolute;left:301px;width:72px;height:72px;padding:0;border:0;border-radius:50%;background:var(--gray-900);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .fab .pl{position:relative;width:37px;height:37px}
 .fab .pl::before,.fab .pl::after{content:'';position:absolute;background:#fff;border-radius:1px}

@@ -4,7 +4,7 @@ import QrPanel from './QrPanel';
 
 const W = 393, H = 852;
 /** The design reserves this much at the top for a mock status bar; real phones have their own. */
-const SB = 54;
+const SB = typeof location !== 'undefined' && /[?&]sb=0/.test(location.search) ? 0 : 54; // ?sb=0 keeps the status-bar area (for mockup videos)
 
 const viewport = () => ({ w: window.innerWidth, h: window.innerHeight });
 const editing = () => {

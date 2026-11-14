@@ -44,7 +44,7 @@ class Component extends DCLogic {
     sched(6000, true);
   }
   componentWillUnmount() {
-    clearInterval(this.t1); clearTimeout(this.t2); clearTimeout(this.t4); clearTimeout(this.t5); this.clearLegs();
+    clearInterval(this.t1); clearTimeout(this.t2); clearTimeout(this.t4); clearTimeout(this.t5); clearTimeout(this.t6); this.clearLegs();
   }
   clearLegs() { (this.legs || []).forEach(clearTimeout); this.legs = []; }
   OVKEYS() { return ['washer-1', 'washer-2', 'vacuum', 'washbasin', 'toilet', 'tv', 'rice-cooker', 'microwave', 'fridge', 'stove', 'kitchen-sink']; }
@@ -116,7 +116,8 @@ class Component extends DCLogic {
     this.hold = Date.now() + 2800; this.idleUntil = this.hold;
     const np = s.problems.concat({ id, kind: 'incident' });
     if (this.props.onPatch) this.props.onPatch({ problems: np });
-    this.setState({ problems: np, face: 'surprised', shock: true, walk: false, pos: cur, dur: 0.05 });
+    this.setState({ problems: np, face: 'surprised', shock: true, walk: false, pos: cur, dur: 0.05, alert: true, popId: id });
+    clearTimeout(this.t6); this.t6 = setTimeout(() => this.setState({ alert: false, popId: '' }), 1500);
     clearTimeout(this.t4);
     this.t4 = setTimeout(() => this.setState({ shock: false, face: 'default' }), 1600);
   }
@@ -203,6 +204,11 @@ class Component extends DCLogic {
       isRoom: s.view === 'room', isEdit: s.view === 'edit',
       sheetNotice: s.view === 'room' && s.sheet === 'notice', sheetIncident: s.view === 'room' && s.sheet === 'incident', sheetCheck: s.view === 'room' && s.sheet === 'check',
       roomTap: (e) => this.roomTap(e),
+      scCls: 'sc' + (s.alert ? ' shk' : ''), showAlert: !!s.alert,
+      showPop: !!s.alert && !!OV[s.popId], popBase: B('/img/home-room.svg'),
+      popLayer: OV[s.popId] ? B(OV[s.popId][1]) : '',
+      popStyle: OV[s.popId] ? 'transform-origin:' + (OV[s.popId][2] + OV[s.popId][4] / 2) + 'px ' + (OV[s.popId][3] + OV[s.popId][5] / 2) + 'px' : '',
+      popClip: OV[s.popId] ? 'clip-path:inset(' + OV[s.popId][3] + 'px ' + (319 - OV[s.popId][2] - OV[s.popId][4]) + 'px ' + (610 - OV[s.popId][3] - OV[s.popId][5]) + 'px ' + OV[s.popId][2] + 'px)' : '',
       showReveal: !!s.reveal,
       rvCells: s.reveal ? (() => { const out = []; for (let r = 0; r < 31; r++) for (let c = 0; c < 17; c++) { const d = Math.hypot(c - 7.6, r - 15.2), t = 0.3 + d / 17.4 * 1.0; out.push({ style: 'left:' + c * 20 + 'px;top:' + r * 20 + 'px;animation-delay:' + t.toFixed(2) + 's' }); } return out; })() : [],
       showTap: !!s.tapK, tapCls: 'tapm ' + (s.tapK % 2 ? 'a' : 'b'), tapStyle: 'left:' + (s.tapX || 0) + 'px;top:' + (s.tapY || 0) + 'px',
@@ -239,7 +245,7 @@ class Component extends DCLogic {
 
 export default makeScreen(Component, (v) => (
   <>
-    <div className="sc">
+    <div className={v.scCls}>
       {!!v.isRoom && (
         <>
         <div style={{position: "absolute", left: "0", top: "60px", width: "393px"}}>
@@ -252,6 +258,14 @@ export default makeScreen(Component, (v) => (
               <img src={l.src} alt="" />
             </Fragment>
           ))}
+          {!!v.showPop && (
+            <>
+            <div className="pop" style={css(v.popStyle)}>
+              <img src={v.popBase} alt="" style={css(v.popClip)} />
+              <img src={v.popLayer} alt="" />
+            </div>
+            </>
+          )}
           {!!v.showChar && (
             <>
             <div className={v.charCls} style={css(v.charStyle)}>
@@ -290,6 +304,11 @@ export default makeScreen(Component, (v) => (
         <div style={{position: "absolute", left: "0", top: "745px", width: "393px"}}>
           <WitooDS.TabBar active="home" onChange={v.tab} />
         </div>
+        {!!v.showAlert && (
+          <>
+          <div className="rd" />
+          </>
+        )}
         </>
       )}
       {!!v.isEdit && (
