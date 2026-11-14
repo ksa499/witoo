@@ -1,6 +1,6 @@
 <svg width="319" height="610" viewBox="0 0 319 610" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#glow)">
-<rect x="150" y="231" width="38" height="49" stroke="#FF771A" stroke-width="2" shape-rendering="crispEdges"/>
+<path d="M173 231H187M150.5 240H173M148 245H150.5M148 263.5H150.5M150.5 273H155M155 277.5H159.5M159.5 282H187M148 245V263.5M150.5 240V245M150.5 263.5V273M155 273V277.5M159.5 277.5V282M173 231V240M187 231V282" fill="none" stroke="#FF771A" stroke-width="2" stroke-linecap="square" shape-rendering="crispEdges"/>
 </g>
 <g transform="translate(159 216)">
 <g filter="url(#filter0_d_184_56741)">
