@@ -186,11 +186,11 @@ class Component extends DCLogic {
     };
     const OV = {
       'washer-1': ['세탁기', '/img/alert-washer-1.svg', 24, 28, 44, 68], 'washer-2': ['세탁기', '/img/alert-washer-2.svg', 74, 28, 44, 68],
-      'vacuum': ['청소기', '/img/alert-vacuum.svg', 256, 22, 30, 95], 'washbasin': ['세면대', '/img/alert-washbasin.svg', 19, 233, 19, 69],
-      'toilet': ['변기', '/img/alert-toilet.svg', 148, 231, 38, 49], 'tv': ['TV', '/img/alert-tv.svg', 291, 205, 11, 51],
-      'air-conditioner': ['에어컨', '/img/alert-air-conditioner.svg', 22, 323, 88, 29], 'rice-cooker': ['밥솥', '/img/alert-rice-cooker.svg', 146, 332, 32, 39],
-      'microwave': ['전자레인지', '/img/alert-microwave.svg', 141, 377, 42, 22], 'fridge': ['냉장고', '/img/alert-fridge.svg', 265, 306, 36, 50],
-      'stove': ['가스레인지', '/img/alert-stove.svg', 256, 357, 45, 85], 'kitchen-sink': ['싱크대', '/img/alert-kitchen-sink.svg', 270, 470, 31, 71]
+      'vacuum': ['청소기', '/img/alert-vacuum.svg', 255, 28, 32, 88], 'washbasin': ['세면대', '/img/alert-washbasin.svg', 15, 231, 19, 72],
+      'toilet': ['변기', '/img/alert-toilet.svg', 150, 231, 38, 49], 'tv': ['TV', '/img/alert-tv.svg', 291, 205, 11, 51],
+      'air-conditioner': ['에어컨', '/img/alert-air-conditioner.svg', 22, 323, 88, 29], 'rice-cooker': ['밥솥', '/img/alert-rice-cooker.svg', 146, 333, 32, 37],
+      'microwave': ['전자레인지', '/img/alert-microwave.svg', 141, 378, 41, 19], 'fridge': ['냉장고', '/img/alert-fridge.svg', 264, 305, 37, 51],
+      'stove': ['가스레인지', '/img/alert-stove.svg', 256, 356, 45, 88], 'kitchen-sink': ['싱크대', '/img/alert-kitchen-sink.svg', 269, 471, 32, 70]
     };
     const FACE = { default: '/img/face-default.svg', happy: '/img/face-happy.svg', love: '/img/face-love.svg', sleepy: '/img/face-sleepy.svg',
       wink: '/img/face-wink.svg', confused: '/img/face-confused.svg', surprised: '/img/face-surprised.svg' };

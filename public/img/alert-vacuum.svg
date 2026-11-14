@@ -1,8 +1,8 @@
 <svg width="319" height="610" viewBox="0 0 319 610" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g filter="url(#glow)">
-<rect x="256" y="22" width="30" height="95" stroke="#FF771A" stroke-width="2" shape-rendering="crispEdges"/>
+<rect x="255" y="28" width="32" height="88" stroke="#FF771A" stroke-width="2" shape-rendering="crispEdges"/>
 </g>
-<g transform="translate(257 13)">
+<g transform="translate(256 19)">
 <g filter="url(#filter0_d_184_56741)">
 <rect x="9" y="9" width="32" height="32" rx="16" fill="#FF771A" shape-rendering="crispEdges"/>
 <path d="M22 32H24V30H26V32H28V34H26V36H24V34H22V32ZM24 24H22V16H24V14H26V16H28V24H26V28H24V24Z" fill="white"/>
