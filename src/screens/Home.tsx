@@ -47,7 +47,8 @@ class Component extends DCLogic {
     clearInterval(this.t1); clearTimeout(this.t2); clearTimeout(this.t4); clearTimeout(this.t5); clearTimeout(this.t6); clearTimeout(this.td); this.clearLegs();
   }
   clearLegs() { (this.legs || []).forEach(clearTimeout); this.legs = []; }
-  OVKEYS() { return ['washer-1', 'washer-2', 'vacuum', 'washbasin', 'toilet', 'tv', 'rice-cooker', 'microwave', 'fridge', 'stove', 'kitchen-sink']; }
+  // 시뮬레이션이 만들어진 가전만 돌발상황으로 나온다 (세탁기). 나머지: 'vacuum', 'washbasin', 'toilet', 'tv', 'rice-cooker', 'microwave', 'fridge', 'stove', 'kitchen-sink'
+  OVKEYS() { return ['washer-1', 'washer-2']; }
   // Where the character's feet may stand (room px): the wood floor, minus furniture and walls.
   free(x, y) {
     if (x < 28 || x > 292 || y < 214 || y > 548) return false;
