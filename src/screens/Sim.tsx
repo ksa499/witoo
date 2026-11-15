@@ -10,8 +10,31 @@ class Component extends DCLogic {
     this._v = null;
     this.state = { stage: 'intro', i: 0, pick: -1, picks: [], end: '', collected: [] };
   }
+  AC() { return !!(this.props.data && this.props.data.simFrom === 'air-conditioner'); }
   STEPS() {
     const F = { cry: '/img/face-cry.svg', sad: '/img/face-sad.svg', confused: '/img/face-confused.svg', normal: '/img/face-default.svg', happy: '/img/face-happy.svg' };
+    if (this.AC()) return [
+      { title: '냄새의 원인 확인하기', face: F.cry, talk: '에어컨을 켜자 퀴퀴한 냄새가 납니다. 바람은 정상적으로 나오지만 냄새가 계속됩니다. 가장 먼저 무엇을 해야 할까요?', choices: [
+        { text: '에어컨을 끄고 필터를 확인한다.', kind: 'ok', res: '필터에 먼지가 쌓여 있는 것을 발견했습니다. 냄새의 원인을 확인하기 위해 필터와 내부 상태를 더 살펴볼 필요가 있습니다.' },
+        { text: '온도를 최저로 낮춰 작동한다.', kind: 'bad', res: '찬바람이 강하게 나오지만 퀴퀴한 냄새는 여전합니다. 온도를 낮추는 것만으로는 냄새의 원인을 제거할 수 없습니다.' },
+        { text: '송풍구에 방향제를 뿌린다.', kind: 'fail', fail: 1, res: '방향제 성분이 내부 부품에 묻어 오염이나 손상을 유발할 수 있습니다. 냄새의 원인도 해결되지 않았습니다.' }] },
+      { title: '필터 청소하기', face: F.sad, talk: '에어컨 필터에 먼지가 두껍게 쌓여 있습니다. 먼지를 제거하기 위해 어떻게 청소해야 할까요?', choices: [
+        { text: '필터를 분리해 세척한다.', kind: 'ok', res: '물세척이 가능한 먼지 필터의 오염을 제거했습니다. 이제 필터를 충분히 건조해야 합니다.' },
+        { text: '청소기로 겉면의 먼지만 제거한다.', kind: 'weak', res: '겉면의 먼지는 줄었지만 필터 안쪽에 쌓인 오염까지 충분히 제거했는지 확인하기 어렵습니다.' },
+        { text: '에어컨 작동 중 필터를 청소한다.', kind: 'fail', fail: 2, res: '작동 중인 에어컨의 내부 부품에 접촉할 위험이 생겼습니다. 안전한 청소 방법을 지키지 못했습니다.' }] },
+      { title: '필터 건조하기', face: F.confused, talk: '필터 청소를 마쳤지만 아직 물기가 남아 있습니다. 에어컨에 다시 장착하기 전에 어떻게 해야 할까요?', choices: [
+        { text: '직사광선 아래에서 말린다.', kind: 'weak', res: '필터가 빠르게 마르기 시작했지만 강한 햇빛과 열에 장시간 노출되면 일부 필터가 변형될 수 있습니다.' },
+        { text: '통풍이 잘되는 그늘에서 말린다.', kind: 'ok', res: '필터가 변형될 위험을 줄이면서 물기를 제거했습니다. 이제 에어컨에 다시 장착할 수 있습니다.' },
+        { text: '물기가 남은 채로 장착한다.', kind: 'fail', fail: 3, res: '필터에 남은 습기가 내부 오염과 냄새를 유발할 수 있습니다. 필터를 충분히 건조하지 않아 관리에 실패했습니다.' }] },
+      { title: '에어컨 내부 관리하기', face: F.normal, talk: '필터 청소를 마쳤지만 에어컨을 켜보니 아직 퀴퀴한 냄새가 남아 있습니다. 내부에 남은 습기와 오염이 원인일 수 있습니다. 어떻게 해야 할까요?', choices: [
+        { text: '내부에 세정제를 직접 뿌린다.', kind: 'fail', fail: 4, res: '전용 제품인지 확인하지 않은 세정제가 내부 부품에 닿아 손상이나 추가 오염을 일으킬 수 있습니다.' },
+        { text: '환기하며 냄새 제거 운전을 한다.', kind: 'ok', res: '설명서에 따른 냄새 제거 운전을 통해 내부의 냄새와 습기를 줄이기 시작했습니다. 냄새가 완전히 사라졌는지 추가 확인이 필요합니다.' },
+        { text: '냄새가 나는 송풍구를 테이프로 막는다.', kind: 'bad', res: '공기 흐름이 방해받고 에어컨의 정상적인 작동에도 영향을 줄 수 있습니다. 냄새의 원인은 그대로 남았습니다.' }] },
+      { title: '냉방 후 관리하기', face: F.happy, talk: '에어컨 냄새가 어느 정도 줄어들었습니다. 앞으로 냄새가 다시 발생하지 않도록 어떻게 관리해야 할까요?', choices: [
+        { text: '사용 후 바로 전원을 끈다.', kind: 'weak', res: '냉방 중 발생한 습기가 내부에 남을 수 있습니다. 냄새가 다시 발생할 가능성이 있습니다.' },
+        { text: '송풍 기능으로 내부를 건조한다.', kind: 'ok', res: '내부 습기를 줄여 곰팡이가 번식하기 쉬운 환경을 예방하는 데 도움이 됩니다. 올바른 관리 습관을 익혔습니다.' },
+        { text: '최저 온도로 10분 더 작동한다.', kind: 'bad', res: '냉방을 연장해도 내부가 충분히 건조되는 것은 아닙니다. 오히려 냉방 중 발생하는 수분이 남을 수 있습니다.' }] }
+    ];
     return [
       { title: '냄새의 원인 확인하기', face: F.cry, talk: '세탁한 옷과 세탁기 내부에서 꿉꿉한 냄새가 납니다. 가장 먼저 무엇을 해야 할까요?', choices: [
         { text: '세제를 더 넣고 다시 세탁한다.', kind: 'bad', res: '세제가 많으면 잔여물이 쌓입니다. 원인은 그대로인 채 세탁만 반복하게 됩니다.' },
@@ -36,6 +59,13 @@ class Component extends DCLogic {
     ];
   }
   ENDS() {
+    if (this.AC()) return {
+      success: { chip: '성공', title: '쾌적한 에어컨', text: '필터 청소부터 내부 건조까지 올바르게 완료했습니다.', hole: true, tips: true },
+      partial: { chip: '부분 성공', title: '아직 남은 냄새', text: '5단계를 마쳤지만 일부 관리가 미흡해 냄새가 남아 추가 관리가 필요합니다.' },
+      bad: { chip: '실패', title: '반복되는 악취', text: '잘못된 선택이 쌓여 냄새의 원인이 해결되지 않았습니다.' },
+      fail1: { chip: '실패 결말 01', title: '잘못된 냄새 제거' }, fail2: { chip: '실패 결말 02', title: '위험한 필터 청소' },
+      fail3: { chip: '실패 결말 03', title: '건조되지 않은 필터' }, fail4: { chip: '실패 결말 04', title: '무분별한 세정제 사용' }
+    };
     return {
       success: { chip: '성공', title: '쾌적한 세탁기', text: '오염 제거와 건조 관리를 올바르게 완료했습니다.', hole: true, tips: true },
       partial: { chip: '부분 성공', title: '아직 남은 문제', text: '세탁기 관리를 시도했지만 냄새의 원인이 충분히 제거되지 않았을 수 있습니다.' },
@@ -93,17 +123,19 @@ class Component extends DCLogic {
     const isPick = s.stage === 'p', fb = s.stage === 'fb';
     const B = (id) => id;
     const choices = q.choices.map((c, n) => ({ text: c.text, sel: s.pick === n, pick: () => this.setState({ pick: n }) }));
-    const TIPS = ['천으로 고무 패킹과\n세제 투입구를 닦는다.', '세탁기 내부와\n고무 패킹을 살핀다.'];
+    const A = this.AC();
+    const TIPS = A ? ['필터를 분리해\n물세척한다.', '송풍 기능으로\n내부를 건조한다.'] : ['천으로 고무 패킹과\n세제 투입구를 닦는다.', '세탁기 내부와\n고무 패킹을 살핀다.'];
     const cur = s.pick >= 0 ? q.choices[s.pick] : null;
     const FBFACE = { ok: '/img/face-happy.svg', weak: '/img/face-confused.svg', bad: '/img/face-sad.svg', fail: '/img/face-dizzy.svg' };
     const END = Object.assign({}, this.ENDS()[s.end] || {});
     if (/^fail/.test(s.end)) END.text = ST[s.i].choices[s.pick].res;
     const win = s.end === 'success';
-    const IM = {"problem": "/img/problem.png", "foam": "/img/foam.png", "clean": "/img/clean.png", "cleanR": "/img/clean-result.png", "cleaner": "/img/cleaner.png", "perfume": "/img/perfume.png", "wipe": "/img/wipe.png", "shock": "/img/shock.png", "gas": "/img/gas.png", "damage": "/img/damage.png", "foamEmpty": "/img/foam-empty.png", "partialR": "/img/partial-result.png"};
-    const FBS = [['foam', 'problem', 'perfume'], ['wipe', 'shock', 'problem'], ['cleaner', 'foam', 'gas'], ['foamEmpty', 'cleaner', 'damage'], ['clean', 'problem', 'clean']];
-    const sceneKey = fb && cur ? FBS[s.i][s.pick] : (s.i <= 1 ? 'problem' : s.i <= 3 ? 'cleaner' : 'clean');
+    const ACI = {"problem": "/img/acsim_problem.png", "filter": "/img/acsim_filter.png", "cold": "/img/acsim_cold.png", "perfume": "/img/acsim_perfume.png", "wash": "/img/acsim_wash.png", "vac": "/img/acsim_vac.png", "shock": "/img/acsim_shock.png", "sun": "/img/acsim_sun.png", "shade": "/img/acsim_shade.png", "wet": "/img/acsim_wet.png", "spray": "/img/acsim_spray.png", "vent": "/img/acsim_vent.png", "tape": "/img/acsim_tape.png", "off": "/img/acsim_off.png", "fan": "/img/acsim_fan.png", "clean": "/img/acsim_clean.png", "partial": "/img/acsim_partial.png"};
+    const IM = A ? ACI : {"problem": "/img/problem.png", "foam": "/img/foam.png", "clean": "/img/clean.png", "cleanR": "/img/clean-result.png", "cleaner": "/img/cleaner.png", "perfume": "/img/perfume.png", "wipe": "/img/wipe.png", "shock": "/img/shock.png", "gas": "/img/gas.png", "damage": "/img/damage.png", "foamEmpty": "/img/foam-empty.png", "partialR": "/img/partial-result.png"};
+    const FBS = A ? [['filter', 'cold', 'perfume'], ['wash', 'vac', 'shock'], ['sun', 'shade', 'wet'], ['spray', 'vent', 'tape'], ['off', 'fan', 'cold']] : [['foam', 'problem', 'perfume'], ['wipe', 'shock', 'problem'], ['cleaner', 'foam', 'gas'], ['foamEmpty', 'cleaner', 'damage'], ['clean', 'problem', 'clean']];
+    const sceneKey = fb && cur ? FBS[s.i][s.pick] : (A ? ['problem', 'filter', 'wash', 'problem', 'partial'][s.i] : s.i <= 1 ? 'problem' : s.i <= 3 ? 'cleaner' : 'clean');
     const sceneId = IM[sceneKey];
-    const ENDIMG = { success: 'cleanR', partial: 'partialR', bad: 'problem', fail1: 'perfume', fail2: 'shock', fail3: 'gas', fail4: 'damage' };
+    const ENDIMG = A ? { success: 'clean', partial: 'partial', bad: 'problem', fail1: 'perfume', fail2: 'shock', fail3: 'wet', fail4: 'spray' } : { success: 'cleanR', partial: 'partialR', bad: 'problem', fail1: 'perfume', fail2: 'shock', fail3: 'gas', fail4: 'damage' };
     const endKey = ENDIMG[s.end] || 'problem';
     const advance = () => {
       if (s.stage === 'q') return this.to('p', { pick: -1 });
@@ -115,6 +147,9 @@ class Component extends DCLogic {
     return {
       rootCls: 'sc' + (s.stage === 'intro' || s.stage === 'result' ? ' lt' : ' dk'),
       is: { intro: s.stage === 'intro', result: s.stage === 'result' },
+      introImg: B(IM.problem), introImgStyle: 'position:absolute;left:0;top:' + (A ? 0 : -45) + 'px;width:393px;height:432px', introChip: A ? '에어컨' : '세탁', introT1: A ? '에어컨에서' : '세탁기에서', introT2: A ? '퀴퀴한 냄새가 나요' : '곰팡이 냄새가 나요',
+      introProb: A ? '오랜만에 에어컨을 켰더니 퀴퀴한 냄새가 납니다. 찬바람은 정상적으로 나오지만 에어컨을 켜둘수록 방 안에 불쾌한 냄새가 퍼집니다.' : '세탁을 마친 후에도 옷에서 꿉꿉한 냄새가 나고, 세탁기 내부에서 불쾌한 곰팡이 냄새가 올라옵니다.',
+      introGoal: A ? '에어컨 냄새의 원인을 확인하고 안전하게 청소한 뒤 올바른 관리 방법을 익히기.' : '냄새의 원인을 파악하고 세탁기를 올바르게 청소하여 다시 쾌적하게 사용할 수 있도록 관리하기.',
       isGame, isPick, isTalk: s.stage === 'q', isTap: s.stage === 'q' || fb, isFeedback: fb,
       showSpeech: s.stage === 'q' || isPick, showFace: !isPick,
       gameTitle: q.title, qNo: s.i + 1, qBar: 'width:' + ((s.i + 1) * 20) + '%',
@@ -135,7 +170,7 @@ class Component extends DCLogic {
       toHome: () => go('home'),
       endChip: END.chip || '', endTitle: END.title || '', endText: END.text || '', endHole: !!END.hole, endTips: !!END.tips,
       endBgSrc: B(IM[endKey]),
-      endBgStyle: endKey === 'cleanR' || endKey === 'partialR' ? 'position:absolute;left:0;top:0;width:393px;height:353px' : 'position:absolute;left:0;top:-8px;width:393px;height:432px',
+      endBgStyle: !A && (endKey === 'cleanR' || endKey === 'partialR') ? 'position:absolute;left:0;top:0;width:393px;height:353px' : 'position:absolute;left:0;top:-8px;width:393px;height:432px',
       tips: TIPS.map((text, n) => ({ text, cls: s.collected.indexOf(n) >= 0 ? 'on' : '', label: s.collected.indexOf(n) >= 0 ? '수집완료' : '수집하기',
         collect: () => { if (s.collected.indexOf(n) < 0) this.setState({ collected: s.collected.concat(n) }); } })),
       finish: () => {
@@ -161,17 +196,17 @@ export default makeScreen(Component, (v) => (
         </div>
         <div className="scr" style={{bottom: "93px"}}>
           <div style={{position: "relative", height: "353px", overflow: "hidden", background: "#fff"}}>
-            <img className="bg" src="/img/problem.png" alt="" style={{position: "absolute", left: "0", top: "-45px", width: "393px", height: "432px"}} />
+            <img className="bg" src={v.introImg} alt="" style={css(v.introImgStyle)} />
           </div>
           <div style={{padding: "40px 20px 32px", display: "flex", flexDirection: "column", gap: "32px"}}>
             <div>
               <span className="chip">
-                세탁
+                {v.introChip}
               </span>
               <h2 className="ttl" style={{marginTop: "12px"}}>
-                세탁기에서
+                {v.introT1}
                 <br />
-                곰팡이 냄새가 나요
+                {v.introT2}
               </h2>
             </div>
             <div>
@@ -179,7 +214,7 @@ export default makeScreen(Component, (v) => (
                 발생한 문제
               </h3>
               <p className="bd">
-                세탁을 마친 후에도 옷에서 꿉꿉한 냄새가 나고, 세탁기 내부에서 불쾌한 곰팡이 냄새가 올라옵니다.
+                {v.introProb}
               </p>
             </div>
             <div>
@@ -187,7 +222,7 @@ export default makeScreen(Component, (v) => (
                 목표
               </h3>
               <p className="bd">
-                냄새의 원인을 파악하고 세탁기를 올바르게 청소하여 다시 쾌적하게 사용할 수 있도록 관리하기.
+                {v.introGoal}
               </p>
             </div>
           </div>
