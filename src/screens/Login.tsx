@@ -43,6 +43,7 @@ class Component extends DCLogic {
       social: () => this.setState({ auth: true }),
       back: go('start'), toPw: go('pwfind'), toSignup: go('signup'),
       submit: () => {
+        if (p.onGo) { p.onGo('start'); return; } // 로그인 버튼 → 바로 시작하기 화면
         if (!filled) return;
         const accounts = { 'user@example.com': 'password1' };
         if (d.email && d.pw) accounts[d.email] = d.pw;
