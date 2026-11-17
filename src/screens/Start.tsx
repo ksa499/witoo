@@ -43,10 +43,7 @@ export default makeScreen(Component, (v) => (
       </div>
       <div style={{position: "absolute", left: "20px", top: "668px", width: "353px", display: "flex", flexDirection: "column", gap: "12px"}}>
         <WitooDS.Button variant="primary" onClick={v.toSignup}>
-          회원가입
-        </WitooDS.Button>
-        <WitooDS.Button variant="outline" onClick={v.toLogin}>
-          로그인
+          시작하기
         </WitooDS.Button>
       </div>
     </div>
