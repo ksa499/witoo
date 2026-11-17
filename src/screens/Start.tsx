@@ -41,7 +41,7 @@ export default makeScreen(Component, (v) => (
           가장 쉬운 방법으로 일상의 문제를 함께 해결하세요.
         </div>
       </div>
-      <div style={{position: "absolute", left: "20px", top: "668px", width: "353px", display: "flex", flexDirection: "column", gap: "12px"}}>
+      <div style={{position: "absolute", left: "20px", top: "692px", width: "353px", display: "flex", flexDirection: "column", gap: "12px"}}>
         <WitooDS.Button variant="primary" onClick={v.toSignup}>
           시작하기
         </WitooDS.Button>
